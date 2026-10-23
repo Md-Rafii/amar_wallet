@@ -4,79 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Information Portal</title>
+<title>Digital Information Report</title>
 
 <style>
+
+/* =========================
+   BASIC
+========================= */
+
 *{
     box-sizing:border-box;
 }
 
-body{
+html,body{
     margin:0;
-    padding:30px 0;
-    background:#f3f3f3;
-    font-family:Arial, "Noto Sans Bengali", sans-serif;
+    padding:0;
 }
 
-/* Main report width */
-.portal{
-    width:1170px;
-    max-width:94%;
-    margin:auto;
-    background:#fff;
-    border:1px solid #ddd;
+body{
+    background:#e9e9e9;
+    font-family:
+        Arial,
+        "Noto Sans Bengali",
+        sans-serif;
+    color:#222;
 }
+
+
+/* =========================
+   A4 PAGE
+========================= */
+
+.a4-page{
+    width:210mm;
+    min-height:297mm;
+
+    margin:20px auto;
+
+    background:#fff;
+
+    border:1px solid #bbb;
+
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+
+    position:relative;
+}
+
 
 /* =========================
    HEADER
 ========================= */
 
 .header{
-    height:165px;
+    height:42mm;
+
     position:relative;
+
     overflow:hidden;
 
     background:
         linear-gradient(
             to bottom,
-            #aebfaf 0%,
-            #728a76 42%,
-            #1f4229 100%
+            #b4c2b5 0%,
+            #789078 40%,
+            #23452c 100%
         );
 }
 
-/* subtle highlight */
+
+/* light effect */
+
 .header::after{
     content:"";
+
     position:absolute;
+
     left:0;
     right:0;
     top:0;
-    height:100%;
+    bottom:0;
+
     background:
         linear-gradient(
             180deg,
             rgba(255,255,255,.22),
             transparent 35%,
-            rgba(0,0,0,.12)
+            rgba(0,0,0,.10)
         );
+
     pointer-events:none;
 }
 
-/* Logo area */
+
+/* LOGO */
 
 .logo-area{
     position:absolute;
+
     left:0;
     top:0;
-    width:165px;
-    height:165px;
+
+    width:43mm;
+    height:42mm;
 
     background:#e9eee9;
 
-    border-radius:0 85px 85px 0;
+    border-radius:
+        0 22mm 22mm 0;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -84,39 +121,48 @@ body{
 }
 
 .logo-placeholder{
-    width:82px;
-    height:82px;
+    width:24mm;
+    height:24mm;
 
     border-radius:50%;
 
-    background:#ffffff;
+    background:#fff;
+
+    border:2px solid #2b7044;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    color:#23623a;
-    font-size:12px;
-    font-weight:bold;
     text-align:center;
 
-    border:3px solid #2d7045;
+    color:#28643c;
+
+    font-size:10px;
+
+    font-weight:bold;
 }
 
-/* Header text */
+
+/* HEADER TEXT */
 
 .header-content{
     position:absolute;
 
-    left:165px;
+    left:43mm;
     right:0;
+
     top:0;
     bottom:0;
 
     display:flex;
+
     flex-direction:column;
-    align-items:center;
+
     justify-content:center;
+
+    align-items:center;
 
     z-index:2;
 }
@@ -124,24 +170,28 @@ body{
 .header-title{
     margin:0;
 
-    color:#fff;
+    color:white;
 
-    font-size:36px;
+    font-size:25px;
+
     font-weight:bold;
 
-    letter-spacing:.2px;
+    text-align:center;
 
     text-shadow:
-        1px 2px 3px rgba(0,0,0,.35);
+        1px 2px 3px rgba(0,0,0,.4);
 }
 
 .header-subtitle{
-    margin-top:7px;
+    margin-top:5px;
 
-    color:#f0df35;
+    color:#f2df35;
 
-    font-size:23px;
+    font-size:15px;
+
     font-weight:bold;
+
+    text-align:center;
 
     text-shadow:
         1px 2px 2px rgba(0,0,0,.3);
@@ -149,118 +199,337 @@ body{
 
 
 /* =========================
-   SEARCH AREA
+   SEARCH
 ========================= */
 
 .search-area{
-    position:relative;
-
-    height:180px;
+    height:45mm;
 
     background:#fff;
 
     text-align:center;
 
-    padding-top:8px;
+    position:relative;
+
+    padding-top:3mm;
 }
 
 .menu-button{
     position:absolute;
 
-    right:14px;
-    top:8px;
+    right:4mm;
+    top:3mm;
 
-    background:#1478d4;
+    background:#1678d4;
 
-    color:#fff;
+    color:white;
 
     border:0;
 
-    padding:9px 18px;
+    padding:6px 13px;
 
-    font-size:13px;
-
-    cursor:pointer;
+    font-size:10px;
 }
 
 .search-heading{
-    margin:0 0 7px;
+    margin:0 0 2mm;
 
-    color:#a1436e;
+    color:#9b426e;
 
-    font-size:20px;
+    font-size:15px;
 
     font-weight:bold;
 }
 
 .search-option{
-    color:#468f7d;
+    color:#468d7d;
 
-    font-size:17px;
+    font-size:11px;
 
-    line-height:28px;
+    line-height:17px;
 }
 
 .search-option input{
     vertical-align:middle;
-    margin-right:6px;
 }
 
 .search-form{
-    margin-top:14px;
+    margin-top:3mm;
 
     display:flex;
-    align-items:center;
+
     justify-content:center;
-    gap:10px;
+
+    align-items:center;
+
+    gap:5px;
 }
 
 .search-label{
-    color:#a63d4b;
+    color:#a33e4b;
+
+    font-size:11px;
 
     font-weight:bold;
-
-    font-size:17px;
 }
 
 .search-input{
-    width:220px;
+    width:42mm;
 
-    height:35px;
+    height:8mm;
 
     border:1px solid #ddd;
 
-    padding:7px 10px;
+    padding:4px;
 
-    font-size:15px;
-
-    outline:none;
-}
-
-.search-input:focus{
-    border-color:#aaa;
+    font-size:11px;
 }
 
 .search-button{
-    height:35px;
+    height:8mm;
 
-    padding:0 22px;
-
-    border:0;
-
-    border-radius:2px;
+    padding:0 12px;
 
     background:#20a54a;
 
-    color:#fff;
+    color:white;
 
-    font-weight:bold;
+    border:0;
+
+    font-size:10px;
 
     cursor:pointer;
 }
 
-.search-button:hover{
-    background:#168d3c;
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.content{
+    display:grid;
+
+    grid-template-columns:48mm 1fr;
+
+    gap:7mm;
+
+    padding:
+        7mm
+        14mm
+        5mm
+        14mm;
+}
+
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.left{
+    text-align:center;
+
+    padding-top:2mm;
+}
+
+.photo{
+    width:36mm;
+
+    height:44mm;
+
+    object-fit:cover;
+
+    border:1px solid #ddd;
+
+    border-radius:2mm;
+}
+
+.person-name{
+    margin-top:3mm;
+
+    margin-bottom:7mm;
+
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.qr{
+    width:32mm;
+
+    height:32mm;
+
+    object-fit:contain;
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.info{
+    width:100%;
+}
+
+.section{
+    background:#b8e1e4;
+
+    min-height:7mm;
+
+    padding:
+        1.5mm
+        2mm;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    border-bottom:1px solid #ddd;
+}
+
+.row{
+    display:grid;
+
+    grid-template-columns:45mm 1fr;
+
+    min-height:7mm;
+
+    border-bottom:1px solid #ededed;
+
+    font-size:10.5px;
+}
+
+.label{
+    padding:1.5mm 1mm;
+}
+
+.value{
+    padding:1.5mm 1mm;
+}
+
+.address{
+    padding:2mm;
+
+    min-height:18mm;
+
+    border-bottom:1px solid #eee;
+
+    font-size:10px;
+
+    line-height:1.55;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.warning{
+    text-align:center;
+
+    color:#d33;
+
+    font-size:8px;
+
+    margin:
+        4mm
+        10mm
+        1mm;
+}
+
+.footer{
+    text-align:center;
+
+    font-family:Georgia,serif;
+
+    font-size:9px;
+
+    padding-bottom:3mm;
+}
+
+
+/* =========================
+   DOWNLOAD BUTTON
+========================= */
+
+.download-area{
+    text-align:center;
+
+    padding:10px;
+
+    background:#f5f5f5;
+
+    border-top:1px solid #ddd;
+}
+
+.download-btn{
+    background:#1678d4;
+
+    color:white;
+
+    border:0;
+
+    padding:11px 25px;
+
+    border-radius:5px;
+
+    font-size:14px;
+
+    cursor:pointer;
+}
+
+.download-btn:hover{
+    background:#0b63b6;
+}
+
+
+/* =========================
+   PRINT / PDF
+========================= */
+
+@page{
+    size:A4 portrait;
+
+    margin:0;
+}
+
+@media print{
+
+    html,
+    body{
+        width:210mm;
+        height:297mm;
+
+        margin:0;
+
+        padding:0;
+
+        background:white;
+    }
+
+    .a4-page{
+        width:210mm;
+
+        height:297mm;
+
+        min-height:297mm;
+
+        margin:0;
+
+        border:0;
+
+        box-shadow:none;
+
+        overflow:hidden;
+    }
+
+    .download-area{
+        display:none;
+    }
+
+    .menu-button{
+        display:none;
+    }
+
 }
 
 
@@ -271,11 +540,19 @@ body{
 @media(max-width:700px){
 
     body{
-        padding:10px 0;
+        background:#eee;
     }
 
-    .portal{
-        max-width:98%;
+    .a4-page{
+        width:100%;
+
+        min-height:auto;
+
+        margin:0;
+
+        border:0;
+
+        box-shadow:none;
     }
 
     .header{
@@ -284,14 +561,19 @@ body{
 
     .logo-area{
         width:110px;
+
         height:115px;
-        border-radius:0 60px 60px 0;
+
+        border-radius:
+            0 60px 60px 0;
     }
 
     .logo-placeholder{
         width:60px;
+
         height:60px;
-        font-size:9px;
+
+        font-size:8px;
     }
 
     .header-content{
@@ -299,57 +581,58 @@ body{
     }
 
     .header-title{
-        font-size:20px;
-        text-align:center;
+        font-size:18px;
     }
 
     .header-subtitle{
-        font-size:13px;
-        text-align:center;
+        font-size:11px;
     }
 
     .search-area{
         height:170px;
     }
 
-    .search-heading{
-        font-size:16px;
+    .content{
+        grid-template-columns:1fr;
+
+        padding:20px;
     }
 
-    .search-option{
-        font-size:14px;
+    .left{
+        margin-bottom:10px;
     }
 
-    .search-form{
-        flex-wrap:wrap;
-        gap:6px;
-    }
-
-    .search-label{
-        font-size:14px;
-    }
-
-    .search-input{
-        width:140px;
+    .row{
+        grid-template-columns:42% 58%;
     }
 }
+
 </style>
 </head>
 
 
 <body>
 
-<div class="portal">
 
-    <!-- HEADER -->
+<div class="a4-page" id="report">
 
-    <div class="header">
 
-        <!-- পরে এখানে নিজের logo বসাবে -->
+    <!-- =====================
+         HEADER
+    ====================== -->
+
+    <header class="header">
+
+
         <div class="logo-area">
 
+            <!-- পরে নিজের logo এখানে বসাবে -->
+
             <div class="logo-placeholder">
-                YOUR<br>LOGO
+
+                YOUR<br>
+                LOGO
+
             </div>
 
         </div>
@@ -367,12 +650,17 @@ body{
 
         </div>
 
-    </div>
+
+    </header>
 
 
-    <!-- SEARCH -->
 
-    <div class="search-area">
+    <!-- =====================
+         SEARCH
+    ====================== -->
+
+    <section class="search-area">
+
 
         <button class="menu-button">
             Menu
@@ -387,14 +675,15 @@ body{
         <div class="search-option">
 
             <label>
+
                 <input
                     type="radio"
                     name="searchType"
-                    value="id"
                     checked
                 >
 
                 Search by ID / Reference No.
+
             </label>
 
         </div>
@@ -403,13 +692,14 @@ body{
         <div class="search-option">
 
             <label>
+
                 <input
                     type="radio"
                     name="searchType"
-                    value="form"
                 >
 
                 Search by Form No.
+
             </label>
 
         </div>
@@ -421,12 +711,14 @@ body{
                 ID or Reference No*
             </span>
 
+
             <input
+                id="searchInput"
                 class="search-input"
                 type="text"
                 placeholder="Enter ID"
-                id="searchInput"
             >
+
 
             <button
                 class="search-button"
@@ -437,24 +729,537 @@ body{
 
         </div>
 
+
+    </section>
+
+
+
+    <!-- =====================
+         MAIN
+    ====================== -->
+
+    <main class="content">
+
+
+        <!-- LEFT -->
+
+        <div class="left">
+
+
+            <img
+                id="photo"
+                class="photo"
+                src="https://via.placeholder.com/200x240"
+                alt="Photo"
+            >
+
+
+            <div
+                id="personName"
+                class="person-name">
+
+                EXAMPLE PERSON
+
+            </div>
+
+
+            <img
+                id="qr"
+                class="qr"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Demo"
+                alt="QR Code"
+            >
+
+
+        </div>
+
+
+
+        <!-- RIGHT -->
+
+        <div class="info">
+
+
+            <!-- IDENTIFICATION -->
+
+            <div class="section">
+                পরিচিতি তথ্য
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    পরিচিতি নম্বর
+                </div>
+
+                <div
+                    class="value"
+                    id="idNumber">
+
+                    DEMO-000001
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    রেফারেন্স নম্বর
+                </div>
+
+                <div
+                    class="value"
+                    id="reference">
+
+                    REF-000001
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    জন্মস্থান
+                </div>
+
+                <div
+                    class="value"
+                    id="birthPlace">
+
+                    Example District
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PERSONAL -->
+
+            <div class="section">
+                ব্যক্তিগত তথ্য
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    নাম (বাংলা)
+                </div>
+
+                <div
+                    class="value"
+                    id="nameBn">
+
+                    উদাহরণ নাম
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    নাম (ইংরেজি)
+                </div>
+
+                <div
+                    class="value"
+                    id="nameEn">
+
+                    EXAMPLE NAME
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    জন্ম তারিখ
+                </div>
+
+                <div
+                    class="value"
+                    id="dob">
+
+                    01 Jan 2000
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    পিতার নাম
+                </div>
+
+                <div
+                    class="value"
+                    id="father">
+
+                    Example Father
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    মাতার নাম
+                </div>
+
+                <div
+                    class="value"
+                    id="mother">
+
+                    Example Mother
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OTHER -->
+
+            <div class="section">
+                অন্যান্য তথ্য
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    রক্তের গ্রুপ
+                </div>
+
+                <div
+                    class="value"
+                    id="blood">
+
+                    O+
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    স্বামী/স্ত্রীর নাম
+                </div>
+
+                <div
+                    class="value"
+                    id="spouse">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    পেশা
+                </div>
+
+                <div
+                    class="value"
+                    id="occupation">
+
+                    Student
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="label">
+                    অন্যান্য
+
+                </div>
+
+                <div
+                    class="value"
+                    id="other">
+
+                    Demo Information
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PRESENT ADDRESS -->
+
+            <div class="section">
+                বর্তমান ঠিকানা
+            </div>
+
+
+            <div
+                class="address"
+                id="presentAddress">
+
+                Example Village, Example Post Office,
+                Example Upazila, Example District.
+
+            </div>
+
+
+
+            <!-- PERMANENT ADDRESS -->
+
+            <div class="section">
+                স্থায়ী ঠিকানা
+            </div>
+
+
+            <div
+                class="address"
+                id="permanentAddress">
+
+                Example Village, Example Post Office,
+                Example Upazila, Example District.
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="warning">
+
+        DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY
+
     </div>
+
+
+    <div class="footer">
+
+        This is a software generated demonstration report.
+
+    </div>
+
+
+
+    <!-- DOWNLOAD -->
+
+    <div class="download-area">
+
+        <button
+            class="download-btn"
+            onclick="downloadPDF()">
+
+            Download A4 PDF
+
+        </button>
+
+    </div>
+
 
 </div>
 
 
+
 <script>
+
+/* =========================
+   DEMO DATA
+========================= */
+
+const data = {
+
+    photo:
+        "https://via.placeholder.com/200x240",
+
+    qr:
+        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Demo",
+
+    personName:
+        "EXAMPLE PERSON",
+
+    idNumber:
+        "DEMO-000001",
+
+    reference:
+        "REF-000001",
+
+    birthPlace:
+        "Example District",
+
+    nameBn:
+        "উদাহরণ নাম",
+
+    nameEn:
+        "EXAMPLE NAME",
+
+    dob:
+        "01 Jan 2000",
+
+    father:
+        "Example Father",
+
+    mother:
+        "Example Mother",
+
+    blood:
+        "O+",
+
+    spouse:
+        "-",
+
+    occupation:
+        "Student",
+
+    other:
+        "Demo Information",
+
+    presentAddress:
+        "Example Village, Example Post Office, Example Upazila, Example District.",
+
+    permanentAddress:
+        "Example Village, Example Post Office, Example Upazila, Example District."
+
+};
+
+
+/* =========================
+   PUT DATA INTO DESIGN
+========================= */
+
+function loadData(){
+
+    document.getElementById("photo").src =
+        data.photo;
+
+    document.getElementById("qr").src =
+        data.qr;
+
+    document.getElementById("personName").textContent =
+        data.personName;
+
+    document.getElementById("idNumber").textContent =
+        data.idNumber;
+
+    document.getElementById("reference").textContent =
+        data.reference;
+
+    document.getElementById("birthPlace").textContent =
+        data.birthPlace;
+
+    document.getElementById("nameBn").textContent =
+        data.nameBn;
+
+    document.getElementById("nameEn").textContent =
+        data.nameEn;
+
+    document.getElementById("dob").textContent =
+        data.dob;
+
+    document.getElementById("father").textContent =
+        data.father;
+
+    document.getElementById("mother").textContent =
+        data.mother;
+
+    document.getElementById("blood").textContent =
+        data.blood;
+
+    document.getElementById("spouse").textContent =
+        data.spouse;
+
+    document.getElementById("occupation").textContent =
+        data.occupation;
+
+    document.getElementById("other").textContent =
+        data.other;
+
+    document.getElementById("presentAddress").textContent =
+        data.presentAddress;
+
+    document.getElementById("permanentAddress").textContent =
+        data.permanentAddress;
+
+}
+
+
+/* Load demo data */
+
+loadData();
+
+
+
+/* =========================
+   SEARCH
+========================= */
 
 function searchData(){
 
     const value =
-        document.getElementById("searchInput").value.trim();
+        document
+        .getElementById("searchInput")
+        .value
+        .trim();
 
     if(!value){
-        alert("Please enter an ID or reference number.");
+
+        alert("Please enter a reference number.");
+
         return;
     }
 
+    /*
+      পরে এখানে API call বসবে:
+
+      fetch("YOUR_API_URL")
+      ...
+    */
+
     console.log("Search:", value);
+
+}
+
+
+
+/* =========================
+   A4 PDF
+========================= */
+
+function downloadPDF(){
+
+    /*
+      Browser-এর Print dialog খুলবে।
+      সেখানে "Save as PDF" নির্বাচন করলে
+      পুরো page A4 PDF হিসেবে save হবে।
+    */
+
+    window.print();
 
 }
 
