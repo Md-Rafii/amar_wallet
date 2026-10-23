@@ -84,9 +84,9 @@
       margin-top: 20px;
     }
 
-    .search-btn {
-      width: 100%;
-    }
+    button:disabled { opacity: .6; cursor: wait; }
+
+    .search-btn { width: 100%; }
 
     .back-btn {
       display: block;
@@ -128,10 +128,10 @@
         <label for="searchDate">Date</label>
         <input id="searchDate" type="date" required>
 
-        <button class="search-btn" type="submit">Search</button>
+        <button id="searchBtn" class="search-btn" type="submit">Search</button>
       </form>
 
-      <p class="note">
+      <p class="note" id="modeNote">
         Demo mode — Search opens the report page.
       </p>
 
@@ -144,7 +144,160 @@
   </div>
 
   <script>
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
+
+    /* =====================================================
+       CONFIG  (এখানে শুধু এই অংশটুকু বদলাবে)
+    ===================================================== */
+
+    const CONFIG = {
+
+      // true = demo data (নাম: Rafit), false = তোমার API call হবে
+      DEMO_MODE: true,
+
+      // তোমার নিজের API-এর URL
+      API_URL: "https://YOUR-API-URL/report",
+
+      // GET বা POST
+      METHOD: "GET",
+
+      // API সর্বোচ্চ কত সেকেন্ড অপেক্ষা করবে
+      TIMEOUT_SEC: 20,
+
+      // Report পেজের path
+      REPORT_PAGE: "../report/index.html"
+    };
+
+
+    /* =====================================================
+       DEMO DATA  (নাম Rafit, বাকি সব demo)
+    ===================================================== */
+
+    function buildDemoData(reference, date) {
+      return {
+        photo: null,            // null হলে report পেজের demo ছবি বসবে
+        qr: null,               // null হলে report পেজের demo QR বসবে
+        personName: "RAFIT",
+        idNumber: "DEMO-000001",
+        reference: reference,
+        birthPlace: "Example District",
+        nameBn: "রাফিত",
+        nameEn: "RAFIT",
+        dob: formatDate(date),
+        father: "Example Father",
+        mother: "Example Mother",
+        blood: "O+",
+        spouse: "-",
+        occupation: "Student",
+        other: "Demo Information",
+        presentAddress: "Example Village, Example Post Office, Example Upazila, Example District.",
+        permanentAddress: "Example Village, Example Post Office, Example Upazila, Example District."
+      };
+    }
+
+
+    /* =====================================================
+       API RESPONSE → REPORT FORMAT
+       তোমার API-র key-এর নাম যা, ডান পাশে সেটা লিখবে
+    ===================================================== */
+
+    function mapApiToReport(api, reference, date) {
+      return {
+        photo:            api.photo,              // ছবির URL বা base64
+        qr:               api.qr,                 // QR-এর URL বা base64
+        personName:       api.name_en,
+        idNumber:         api.id_number,
+        reference:        api.reference || reference,
+        birthPlace:       api.birth_place,
+        nameBn:           api.name_bn,
+        nameEn:           api.name_en,
+        dob:              api.date_of_birth,
+        father:           api.father_name,
+        mother:           api.mother_name,
+        blood:            api.blood_group,
+        spouse:           api.spouse_name,
+        occupation:       api.occupation,
+        other:            api.other,
+        presentAddress:   api.present_address,
+        permanentAddress: api.permanent_address
+      };
+    }
+
+
+    /* =====================================================
+       API CALL
+    ===================================================== */
+
+    async function callApi(reference, date) {
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_SEC * 1000);
+
+      try {
+
+        let response;
+
+        if (CONFIG.METHOD === "POST") {
+
+          response = await fetch(CONFIG.API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reference: reference, date: date }),
+            signal: controller.signal
+          });
+
+        } else {
+
+          const url = CONFIG.API_URL +
+            "?reference=" + encodeURIComponent(reference) +
+            "&date=" + encodeURIComponent(date);
+
+          response = await fetch(url, { signal: controller.signal });
+        }
+
+        if (!response.ok) {
+          throw new Error("API error: " + response.status);
+        }
+
+        const json = await response.json();
+
+        // API যদি { data: {...} } আকারে পাঠায়
+        const api = json.data || json;
+
+        if (!api || Object.keys(api).length === 0) {
+          throw new Error("EMPTY");
+        }
+
+        return mapApiToReport(api, reference, date);
+
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const d = new Date(value);
+      if (isNaN(d)) return value;
+      return d.toLocaleDateString("en-GB", {
+        day: "2-digit", month: "short", year: "numeric"
+      });
+    }
+
+
+    /* =====================================================
+       FORM SUBMIT
+    ===================================================== */
+
+    document.getElementById("modeNote").textContent = CONFIG.DEMO_MODE
+      ? "Demo mode — Search opens the report page."
+      : "Search opens the report page.";
+
+    document.getElementById("searchForm").addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const reference = document.getElementById("reference").value.trim();
@@ -155,17 +308,43 @@
         return;
       }
 
-      // Demo search details save
-      sessionStorage.setItem("reportReference", reference);
-      sessionStorage.setItem("reportDate", date);
+      const button = document.getElementById("searchBtn");
+      button.disabled = true;
+      button.textContent = "Searching...";
 
-      // Open report/index.html
-      window.location.href =
-        "../report/index.html?reference=" +
-        encodeURIComponent(reference) +
-        "&date=" +
-        encodeURIComponent(date);
+      try {
+
+        const reportData = CONFIG.DEMO_MODE
+          ? buildDemoData(reference, date)
+          : await callApi(reference, date);
+
+        // Report পেজের জন্য তথ্য সেভ
+        sessionStorage.setItem("reportReference", reference);
+        sessionStorage.setItem("reportDate", date);
+        sessionStorage.setItem("reportData", JSON.stringify(reportData));
+
+        window.location.href =
+          CONFIG.REPORT_PAGE +
+          "?reference=" + encodeURIComponent(reference) +
+          "&date=" + encodeURIComponent(date);
+
+      } catch (error) {
+
+        console.error(error);
+
+        if (error.message === "EMPTY") {
+          alert("কোনো তথ্য পাওয়া যায়নি।");
+        } else if (error.name === "AbortError") {
+          alert("সময় শেষ হয়ে গেছে, আবার চেষ্টা করুন।");
+        } else {
+          alert("তথ্য আনতে সমস্যা হয়েছে, আবার চেষ্টা করুন।");
+        }
+
+        button.disabled = false;
+        button.textContent = "Search";
+      }
     });
+
   </script>
 </body>
 </html>
