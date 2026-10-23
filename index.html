@@ -1,199 +1,70 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Information Portal - Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- background:#e8e8e8;
- font-family:Arial,sans-serif;
- color:#333;
-}
-
-.page{
- max-width:900px;
- min-height:100vh;
- margin:20px auto;
- background:#fff;
- box-shadow:0 2px 10px #bbb;
-}
-
-.header{
- height:120px;
- background:linear-gradient(90deg,#edf4ef,#245333);
- display:flex;
- align-items:center;
- padding:15px 30px;
-}
-
-.logo{
- width:90px;
- height:90px;
- border-radius:50%;
- border:2px solid #477052;
- background:white;
- display:flex;
- justify-content:center;
- align-items:center;
- text-align:center;
- font-size:9px;
- color:#477052;
-}
-
-.headerText{
- flex:1;
- text-align:center;
- color:white;
-}
-
-.headerText h1{
- margin:0 0 8px;
- font-size:22px;
-}
-
-.headerText p{
- margin:0;
- color:#e8df31;
- font-size:13px;
-}
-
-.dashboard{
- padding:35px;
-}
-
-h2{
- text-align:center;
- color:#285b3a;
-}
-
-.balance{
- margin:25px auto;
- max-width:500px;
- padding:22px;
- border-radius:10px;
- background:linear-gradient(135deg,#168548,#063c20);
- color:white;
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
-
-.coin{
- font-size:25px;
- font-weight:bold;
-}
-
-.card{
- max-width:500px;
- margin:25px auto;
- border:1px solid #ddd;
- border-radius:10px;
- padding:25px;
- cursor:pointer;
- transition:.2s;
-}
-
-.card:hover{
- box-shadow:0 5px 18px #ccc;
- transform:translateY(-2px);
-}
-
-.card h3{
- color:#168548;
- margin-top:0;
-}
-
-.openBtn{
- background:#249b52;
- color:white;
- border:0;
- border-radius:4px;
- padding:12px 25px;
- cursor:pointer;
-}
+body{margin:0;background:#e8e8e8;font-family:Arial,sans-serif;color:#333}
+.page{max-width:900px;min-height:100vh;margin:20px auto;background:#fff;box-shadow:0 2px 10px #bbb}
+.header{height:120px;background:linear-gradient(90deg,#edf4ef,#245333);display:flex;align-items:center;padding:15px 25px}
+.logo{width:85px;height:85px;flex-shrink:0;border-radius:50%;background:white;border:2px solid #477052;display:flex;align-items:center;justify-content:center;text-align:center;color:#477052;font-size:10px}
+.headerText{flex:1;text-align:center;color:white}
+.headerText h1{font-size:21px;margin:0 0 8px}
+.headerText p{margin:0;color:#e8df31;font-size:13px}
+main{padding:30px 20px}
+h2{text-align:center;color:#285b3a}
+.balance{max-width:500px;margin:25px auto;padding:22px;background:linear-gradient(135deg,#168548,#063c20);color:white;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.coin{font-size:24px;font-weight:bold}
+.card{max-width:500px;margin:20px auto;padding:25px;border:1px solid #ddd;border-radius:10px;cursor:pointer}
+.card h3{color:#168548;margin-top:0}
+.card:hover{box-shadow:0 4px 15px #ddd}
+button{border:0;border-radius:4px;padding:12px 20px;cursor:pointer}
+.open{background:#249b52;color:white;width:100%;margin-top:10px}
+.note{text-align:center;color:#777;font-size:12px}
+@media(max-width:600px){.page{margin:0}.header{height:110px;padding:10px 15px}.logo{width:70px;height:70px}.headerText h1{font-size:16px}}
 </style>
 </head>
 
 <body>
-
 <div class="page">
+  <header class="header">
+    <div class="logo">YOUR<br>LOGO</div>
+    <div class="headerText">
+      <h1>Information Portal</h1>
+      <p>Digital Information System</p>
+    </div>
+  </header>
 
-<header class="header">
+  <main>
+    <h2>Dashboard</h2>
 
-<div class="logo">
-YOUR<br>LOGO
+    <div class="balance">
+      <div>
+        <strong>Available Coins</strong><br>
+        <small>10 coins per successful search</small>
+      </div>
+      <div class="coin">🪙 100</div>
+    </div>
+
+    <div class="card" onclick="openSearch()">
+      <h3>📋 Reference Copy</h3>
+      <p>Reference Number এবং Date of Birth দিয়ে অনুসন্ধান করুন।</p>
+      <p><strong>Charge:</strong> 10 coins per successful search</p>
+      <button class="open" type="button">Open Reference Copy</button>
+    </div>
+
+    <p class="note">Development demo</p>
+  </main>
 </div>
-
-<div class="headerText">
-<h1>Information Portal</h1>
-<p>Digital Information System</p>
-</div>
-
-</header>
-
-
-<main class="dashboard">
-
-<h2>Dashboard</h2>
-
-<div class="balance">
-
-<div>
-<strong>Available Coins</strong>
-<br>
-<small>10 coins per successful search</small>
-</div>
-
-<div class="coin" id="coins">
-100 🪙
-</div>
-
-</div>
-
-
-<div class="card" onclick="openReference()">
-
-<h3>📋 Reference Copy</h3>
-
-<p>
-Reference Number এবং Date of Birth দিয়ে
-তথ্য অনুসন্ধান করুন।
-</p>
-
-<p>
-<strong>Charge:</strong> 10 Coins
-</p>
-
-<button class="openBtn">
-Open Reference Copy
-</button>
-
-</div>
-
-</main>
-
-</div>
-
 
 <script>
-
-function openReference(){
-
- /*
-  Search page-এর location তোমার hosting অনুযায়ী
-  পরিবর্তন করতে পারো।
- */
-
- window.location.href="./search/index.html";
-
+function openSearch(){
+  window.location.href = "./search/index.html";
 }
-
 </script>
-
 </body>
 </html>
