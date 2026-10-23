@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Reference Search</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#e8e8e8;
+ font-family:Arial,sans-serif;
+}
+
+.page{
+ max-width:900px;
+ min-height:100vh;
+ margin:20px auto;
+ background:white;
+ box-shadow:0 2px 10px #bbb;
+}
+
+.header{
+ height:120px;
+ background:linear-gradient(90deg,#edf4ef,#245333);
+ display:flex;
+ align-items:center;
+ padding:15px 30px;
+}
+
+.logo{
+ width:90px;
+ height:90px;
+ border-radius:50%;
+ border:2px solid #477052;
+ background:white;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ font-size:9px;
+ color:#477052;
+}
+
+.headerText{
+ flex:1;
+ text-align:center;
+ color:white;
+}
+
+.headerText h1{
+ font-size:22px;
+ margin:0 0 8px;
+}
+
+.headerText p{
+ margin:0;
+ color:#e8df31;
+ font-size:13px;
+}
+
+.content{
+ padding:40px 25px;
+}
+
+.back{
+ background:#555;
+ color:white;
+ border:0;
+ padding:9px 18px;
+ border-radius:4px;
+}
+
+.form{
+ max-width:500px;
+ margin:35px auto;
+}
+
+.title{
+ text-align:center;
+ color:#39704c;
+ margin-bottom:30px;
+}
+
+label{
+ display:block;
+ margin:16px 0 7px;
+ font-size:14px;
+}
+
+input{
+ width:100%;
+ padding:13px;
+ border:1px solid #bbb;
+ border-radius:5px;
+}
+
+.search{
+ width:100%;
+ margin-top:22px;
+ padding:13px;
+ border:0;
+ border-radius:5px;
+ background:#249b52;
+ color:white;
+ cursor:pointer;
+}
+
+.search:disabled{
+ opacity:.6;
+}
+
+.note{
+ text-align:center;
+ font-size:12px;
+ color:#777;
+ margin-top:15px;
+}
+
+.toast{
+ position:fixed;
+ bottom:30px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#333;
+ color:white;
+ padding:12px 22px;
+ border-radius:5px;
+ display:none;
+ z-index:999;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<header class="header">
+
+<div class="logo">
+YOUR<br>LOGO
+</div>
+
+<div class="headerText">
+<h1>Information Portal</h1>
+<p>Digital Information System</p>
+</div>
+
+</header>
+
+
+<div class="content">
+
+<button class="back" onclick="history.back()">
+← Back
+</button>
+
+
+<div class="form">
+
+<h2 class="title">
+Reference Copy
+</h2>
+
+
+<label>
+Reference Number
+</label>
+
+<input
+ id="reference"
+ type="text"
+ placeholder="Enter reference number"
+/>
+
+
+<label>
+Date of Birth
+</label>
+
+<input
+ id="dob"
+ type="date"
+/>
+
+
+<button
+ id="searchBtn"
+ class="search"
+ onclick="searchAPI()"
+>
+Search
+</button>
+
+
+<div class="note">
+API সফল হলেই পরবর্তী Report Page খুলবে।
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/*
+=========================================
+YOUR API
+=========================================
+
+Example:
+
+https://example.com/api/search
+
+Expected:
+
+{
+  "success": true,
+  "data": {
+    "reference": "663",
+    "dob": "2000-10-23",
+    "nameBn": "...",
+    "nameEn": "...",
+    "father": "...",
+    "mother": "...",
+    "blood": "...",
+    "occupation": "...",
+    "presentAddress": "...",
+    "permanentAddress": "...",
+    "photo": "https://..."
+  }
+}
+*/
+
+const API_URL =
+"https://YOUR-API-SERVER.com/api/search";
+
+
+const COST = 10;
+
+
+function showToast(message){
+
+ const toast=document.getElementById("toast");
+
+ toast.textContent=message;
+ toast.style.display="block";
+
+ setTimeout(()=>{
+   toast.style.display="none";
+ },3000);
+
+}
+
+
+async function searchAPI(){
+
+ const reference=
+ document.getElementById("reference").value.trim();
+
+ const dob=
+ document.getElementById("dob").value;
+
+
+ if(!reference){
+
+   showToast("Reference Number দিন");
+   return;
+
+ }
+
+
+ if(!dob){
+
+   showToast("Date of Birth দিন");
+   return;
+
+ }
+
+
+ const button=
+ document.getElementById("searchBtn");
+
+ button.disabled=true;
+ button.textContent="Searching...";
+
+
+ try{
+
+   const url=
+     API_URL+
+     "?reference="+
+     encodeURIComponent(reference)+
+     "&dob="+
+     encodeURIComponent(dob);
+
+
+   const response=
+     await fetch(url,{
+       method:"GET",
+       headers:{
+         "Accept":"application/json"
+       }
+     });
+
+
+   if(!response.ok){
+
+     throw new Error("API_FAILED");
+
+   }
+
+
+   const result=
+     await response.json();
+
+
+   /*
+   ==========================
+   API SUCCESS CHECK
+   ==========================
+   */
+
+   if(
+     result.success !== true ||
+     !result.data
+   ){
+
+     throw new Error("API_FAILED");
+
+   }
+
+
+   /*
+   ==========================
+   API SUCCESS
+   ==========================
+
+   এখানে data temporaryভাবে
+   browser-এর sessionStorage-এ রাখা হচ্ছে।
+   */
+
+   sessionStorage.setItem(
+     "reportData",
+     JSON.stringify(result.data)
+   );
+
+
+   /*
+   Reference number-টাও save করছি
+   */
+
+   sessionStorage.setItem(
+     "reportReference",
+     reference
+   );
+
+
+   /*
+   ==========================
+   COIN DEDUCTION
+   ==========================
+
+   Production-এ এখানে নিজের secure
+   backend/Firebase transaction call করবে।
+
+   API success হওয়ার আগ পর্যন্ত
+   এই function call হবে না।
+   */
+
+   const coinResult=
+     await deductCoins(COST);
+
+
+   if(!coinResult.success){
+
+     throw new Error("COIN_FAILED");
+
+   }
+
+
+   /*
+   ==========================
+   REPORT PAGE
+   ==========================
+   */
+
+   window.location.href=
+     "../report/index.html";
+
+
+ }catch(error){
+
+   console.error(error);
+
+
+   /*
+   API fail হলে:
+   - report page যাবে না
+   - coin deduction হবে না
+   */
+
+   if(error.message==="COIN_FAILED"){
+
+     showToast("Coin deduction failed");
+
+   }else{
+
+     showToast("API server off");
+
+   }
+
+ }finally{
+
+   button.disabled=false;
+   button.textContent="Search";
+
+ }
+
+}
+
+
+/*
+=========================================
+SECURE COIN FUNCTION
+=========================================
+
+এটা production-এ backend endpoint হবে।
+
+Frontend থেকে সরাসরি Firebase balance
+কমাবে না।
+*/
+
+async function deductCoins(amount){
+
+ /*
+   Example:
+
+   const token =
+     await firebase.auth().currentUser.getIdToken();
+
+   const response =
+     await fetch("/api/deduct-coins",{
+       method:"POST",
+       headers:{
+         "Authorization":"Bearer "+token,
+         "Content-Type":"application/json"
+       },
+       body:JSON.stringify({
+         amount:amount
+       })
+     });
+
+   return await response.json();
+ */
+
+
+ /*
+   এখন demo purpose-এ success করছি।
+
+   Production-এ এই অংশে তোমার
+   secure backend বসাতে হবে।
+ */
+
+ return {
+   success:true
+ };
+
+}
+
+</script>
+
+</body>
+</html>
