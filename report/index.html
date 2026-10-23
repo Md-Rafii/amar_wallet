@@ -273,6 +273,20 @@ async function getRecord(reference, date){
       return await res.json();   // data-এর মতো একই key থাকতে হবে
     */
 
+    // Search পেজ (API বা demo) থেকে সেভ করা তথ্য
+    const saved = sessionStorage.getItem("reportData");
+
+    if(saved){
+        try{
+            const d = JSON.parse(saved);
+            if((d.reference || "").toUpperCase() === reference.toUpperCase()){
+                return d;
+            }
+        }catch(e){
+            console.error(e);
+        }
+    }
+
     const found = records[reference.toUpperCase()];
 
     if(found){
