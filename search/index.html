@@ -318,15 +318,30 @@
           ? buildDemoData(reference, date)
           : await callApi(reference, date);
 
-        // Report পেজের জন্য তথ্য সেভ
-        sessionStorage.setItem("reportReference", reference);
-        sessionStorage.setItem("reportDate", date);
-        sessionStorage.setItem("reportData", JSON.stringify(reportData));
+        // Report পেজের জন্য তথ্য সেভ (storage বন্ধ থাকলেও যেন সমস্যা না হয়)
+        const json = JSON.stringify(reportData);
+
+        try {
+          sessionStorage.setItem("reportReference", reference);
+          sessionStorage.setItem("reportDate", date);
+          sessionStorage.setItem("reportData", json);
+        } catch (e) {}
+
+        try {
+          localStorage.setItem("reportData", json);
+        } catch (e) {}
+
+        // URL-এও তথ্য পাঠানো (বড় ছবি/QR বাদ দিয়ে)
+        const small = { ...reportData };
+        if (small.photo && small.photo.length > 2000) small.photo = null;
+        if (small.qr && small.qr.length > 2000) small.qr = null;
+        const packed = btoa(unescape(encodeURIComponent(JSON.stringify(small))));
 
         window.location.href =
           CONFIG.REPORT_PAGE +
           "?reference=" + encodeURIComponent(reference) +
-          "&date=" + encodeURIComponent(date);
+          "&date=" + encodeURIComponent(date) +
+          "&d=" + encodeURIComponent(packed);
 
       } catch (error) {
 
