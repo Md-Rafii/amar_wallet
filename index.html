@@ -1,70 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Information Portal - Dashboard</title>
-
+<title>Dashboard</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#e8e8e8;font-family:Arial,sans-serif;color:#333}
-.page{max-width:900px;min-height:100vh;margin:20px auto;background:#fff;box-shadow:0 2px 10px #bbb}
-.header{height:120px;background:linear-gradient(90deg,#edf4ef,#245333);display:flex;align-items:center;padding:15px 25px}
-.logo{width:85px;height:85px;flex-shrink:0;border-radius:50%;background:white;border:2px solid #477052;display:flex;align-items:center;justify-content:center;text-align:center;color:#477052;font-size:10px}
-.headerText{flex:1;text-align:center;color:white}
-.headerText h1{font-size:21px;margin:0 0 8px}
-.headerText p{margin:0;color:#e8df31;font-size:13px}
-main{padding:30px 20px}
-h2{text-align:center;color:#285b3a}
-.balance{max-width:500px;margin:25px auto;padding:22px;background:linear-gradient(135deg,#168548,#063c20);color:white;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
-.coin{font-size:24px;font-weight:bold}
-.card{max-width:500px;margin:20px auto;padding:25px;border:1px solid #ddd;border-radius:10px;cursor:pointer}
-.card h3{color:#168548;margin-top:0}
-.card:hover{box-shadow:0 4px 15px #ddd}
-button{border:0;border-radius:4px;padding:12px 20px;cursor:pointer}
-.open{background:#249b52;color:white;width:100%;margin-top:10px}
-.note{text-align:center;color:#777;font-size:12px}
-@media(max-width:600px){.page{margin:0}.header{height:110px;padding:10px 15px}.logo{width:70px;height:70px}.headerText h1{font-size:16px}}
+body{margin:0;background:#eee;font-family:Arial,sans-serif;color:#333}
+.page{max-width:900px;min-height:100vh;margin:auto;background:white}
+.header{padding:20px;display:flex;align-items:center;gap:18px;background:linear-gradient(90deg,#edf4ef,#245333);color:white}
+.logo{width:65px;height:65px;flex-shrink:0;border-radius:50%;background:white;color:#245333;display:grid;place-items:center;font-size:11px}
+.headerText{text-align:center;flex:1}
+.headerText h2{margin:0 0 7px;font-size:20px}
+.headerText p{margin:0;color:#f3e65a;font-size:12px}
+main{padding:25px 18px}
+h3{text-align:center;color:#245333}
+.balance,.card,.demo{max-width:500px;margin:20px auto;padding:20px;border-radius:10px;border:1px solid #ddd}
+.balance{background:#126b3c;color:white;display:flex;justify-content:space-between;align-items:center}
+.card{cursor:pointer}
+.card h3{text-align:left;color:#168548}
+button{border:0;border-radius:5px;padding:12px;cursor:pointer}
+.open{width:100%;background:#168548;color:white;margin-top:10px}
+.demo{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.demo small{display:block;color:#777;margin-top:6px}
+#demoStatus{font-size:12px;font-weight:bold;margin-top:6px}
+.switch{position:relative;width:50px;height:28px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.track{position:absolute;inset:0;background:#aaa;border-radius:20px;cursor:pointer}
+.track:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s}
+.switch input:checked+.track{background:#168548}
+.switch input:checked+.track:before{transform:translateX(22px)}
+.note{text-align:center;font-size:12px;color:#777}
 </style>
 </head>
-
 <body>
 <div class="page">
-  <header class="header">
-    <div class="logo">YOUR<br>LOGO</div>
-    <div class="headerText">
-      <h1>Information Portal</h1>
-      <p>Digital Information System</p>
-    </div>
-  </header>
+<header class="header">
+  <div class="logo">YOUR LOGO</div>
+  <div class="headerText">
+    <h2>Information Portal</h2>
+    <p>Digital Information System</p>
+  </div>
+</header>
 
-  <main>
-    <h2>Dashboard</h2>
+<main>
+<h3>Dashboard</h3>
 
-    <div class="balance">
-      <div>
-        <strong>Available Coins</strong><br>
-        <small>10 coins per successful search</small>
-      </div>
-      <div class="coin">🪙 100</div>
-    </div>
+<div class="balance">
+  <div>Available Coins<br><small>10 coins per successful search</small></div>
+  <strong>🪙 100</strong>
+</div>
 
-    <div class="card" onclick="openSearch()">
-      <h3>📋 Reference Copy</h3>
-      <p>Reference Number এবং Date of Birth দিয়ে অনুসন্ধান করুন।</p>
-      <p><strong>Charge:</strong> 10 coins per successful search</p>
-      <button class="open" type="button">Open Reference Copy</button>
-    </div>
+<div class="demo">
+  <div>
+    <strong>Demo Mode</strong>
+    <small>API ছাড়া পরীক্ষামূলক Search</small>
+    <div id="demoStatus">OFF</div>
+  </div>
+  <label class="switch">
+    <input type="checkbox" id="demoToggle">
+    <span class="track"></span>
+  </label>
+</div>
 
-    <p class="note">Development demo</p>
-  </main>
+<div class="card" id="referenceCard" role="link" tabindex="0">
+  <h3>📋 Reference Copy</h3>
+  <p>Reference Number এবং জন্মতারিখ দিয়ে Search করুন।</p>
+  <p><b>Charge:</b> সফল Search-এর জন্য 10 coins</p>
+  <button class="open" type="button">Open Search</button>
+</div>
+
+<p class="note">Demo Mode-এ কোনো coin কাটা হবে না।</p>
+</main>
 </div>
 
 <script>
-function openSearch(){
-  window.location.href = "./search/index.html";
+const toggle=document.getElementById("demoToggle");
+const status=document.getElementById("demoStatus");
+
+toggle.checked=localStorage.getItem("demoMode")==="on";
+
+function updateStatus(){
+  localStorage.setItem("demoMode",toggle.checked?"on":"off");
+  status.textContent=toggle.checked?"ON — Demo enabled":"OFF — Live API";
+  status.style.color=toggle.checked?"#168548":"#777";
 }
+toggle.addEventListener("change",updateStatus);
+updateStatus();
+
+function openSearch(){
+  window.location.href="./search/index.html";
+}
+document.getElementById("referenceCard").addEventListener("click",openSearch);
+document.getElementById("referenceCard").addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){
+    e.preventDefault();
+    openSearch();
+  }
+});
 </script>
 </body>
 </html>
