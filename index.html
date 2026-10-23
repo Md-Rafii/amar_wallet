@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Digital Information Report</title>
 
+
+<!-- PDF LIBRARIES -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
 <style>
 
 /* =========================
-   BASIC
+   RESET
 ========================= */
 
 *{
     box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
     margin:0;
     padding:0;
 }
 
 body{
-    background:#e9e9e9;
+
+    background:#e5e5e5;
+
     font-family:
         Arial,
         "Noto Sans Bengali",
         sans-serif;
+
     color:#222;
 }
 
@@ -36,18 +49,23 @@ body{
 ========================= */
 
 .a4-page{
+
     width:210mm;
-    min-height:297mm;
+
+    height:297mm;
 
     margin:20px auto;
 
     background:#fff;
 
+    position:relative;
+
+    overflow:hidden;
+
     border:1px solid #bbb;
 
-    box-shadow:0 0 10px rgba(0,0,0,.15);
-
-    position:relative;
+    box-shadow:
+        0 0 12px rgba(0,0,0,.18);
 }
 
 
@@ -56,7 +74,10 @@ body{
 ========================= */
 
 .header{
-    height:42mm;
+
+    width:100%;
+
+    height:40mm;
 
     position:relative;
 
@@ -65,95 +86,108 @@ body{
     background:
         linear-gradient(
             to bottom,
-            #b4c2b5 0%,
-            #789078 40%,
-            #23452c 100%
+            #b5c2b6 0%,
+            #788f7b 42%,
+            #24462d 100%
         );
 }
 
 
-/* light effect */
+/* Highlight */
 
 .header::after{
+
     content:"";
 
     position:absolute;
 
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
+    inset:0;
 
     background:
         linear-gradient(
             180deg,
             rgba(255,255,255,.22),
-            transparent 35%,
-            rgba(0,0,0,.10)
+            transparent 38%,
+            rgba(0,0,0,.12)
         );
 
     pointer-events:none;
 }
 
 
-/* LOGO */
+/* =========================
+   LOGO
+========================= */
 
 .logo-area{
+
     position:absolute;
 
     left:0;
+
     top:0;
 
-    width:43mm;
-    height:42mm;
+    width:42mm;
+
+    height:40mm;
 
     background:#e9eee9;
 
     border-radius:
-        0 22mm 22mm 0;
+        0 21mm 21mm 0;
 
     display:flex;
 
-    align-items:center;
     justify-content:center;
+
+    align-items:center;
 
     z-index:2;
 }
 
+
 .logo-placeholder{
-    width:24mm;
-    height:24mm;
+
+    width:23mm;
+
+    height:23mm;
 
     border-radius:50%;
 
     background:#fff;
 
-    border:2px solid #2b7044;
+    border:2px solid #28663b;
 
     display:flex;
 
-    align-items:center;
     justify-content:center;
+
+    align-items:center;
 
     text-align:center;
 
-    color:#28643c;
+    color:#28663b;
 
-    font-size:10px;
+    font-size:9px;
 
     font-weight:bold;
 }
 
 
-/* HEADER TEXT */
+/* =========================
+   HEADER TEXT
+========================= */
 
 .header-content{
+
     position:absolute;
 
-    left:43mm;
+    left:42mm;
+
     right:0;
 
     top:0;
+
     bottom:0;
 
     display:flex;
@@ -167,12 +201,14 @@ body{
     z-index:2;
 }
 
+
 .header-title{
+
     margin:0;
 
-    color:white;
+    color:#fff;
 
-    font-size:25px;
+    font-size:24px;
 
     font-weight:bold;
 
@@ -182,10 +218,12 @@ body{
         1px 2px 3px rgba(0,0,0,.4);
 }
 
+
 .header-subtitle{
+
     margin-top:5px;
 
-    color:#f2df35;
+    color:#f0df35;
 
     font-size:15px;
 
@@ -203,57 +241,71 @@ body{
 ========================= */
 
 .search-area{
-    height:45mm;
+
+    width:100%;
+
+    height:38mm;
+
+    position:relative;
 
     background:#fff;
 
     text-align:center;
 
-    position:relative;
-
     padding-top:3mm;
 }
 
+
 .menu-button{
+
     position:absolute;
 
     right:4mm;
+
     top:3mm;
 
-    background:#1678d4;
+    background:#147bd3;
 
     color:white;
 
     border:0;
 
-    padding:6px 13px;
+    padding:5px 13px;
 
-    font-size:10px;
+    font-size:9px;
 }
 
+
 .search-heading{
-    margin:0 0 2mm;
 
-    color:#9b426e;
+    margin:0 0 1.5mm;
 
-    font-size:15px;
+    color:#9d416e;
+
+    font-size:14px;
 
     font-weight:bold;
 }
 
+
 .search-option{
-    color:#468d7d;
 
-    font-size:11px;
+    color:#438d7c;
 
-    line-height:17px;
+    font-size:10px;
+
+    line-height:16px;
 }
 
+
 .search-option input{
+
     vertical-align:middle;
 }
 
+
 .search-form{
+
     margin-top:3mm;
 
     display:flex;
@@ -265,40 +317,48 @@ body{
     gap:5px;
 }
 
-.search-label{
-    color:#a33e4b;
 
-    font-size:11px;
+.search-label{
+
+    color:#a53c4b;
+
+    font-size:10px;
 
     font-weight:bold;
 }
 
-.search-input{
-    width:42mm;
 
-    height:8mm;
+.search-input{
+
+    width:43mm;
+
+    height:7mm;
 
     border:1px solid #ddd;
 
-    padding:4px;
+    padding:3px 6px;
 
-    font-size:11px;
+    font-size:10px;
+
+    outline:none;
 }
 
+
 .search-button{
-    height:8mm;
+
+    height:7mm;
 
     padding:0 12px;
 
     background:#20a54a;
 
-    color:white;
+    color:#fff;
 
     border:0;
 
-    font-size:10px;
-
     cursor:pointer;
+
+    font-size:9px;
 }
 
 
@@ -307,58 +367,77 @@ body{
 ========================= */
 
 .content{
+
     display:grid;
 
-    grid-template-columns:48mm 1fr;
+    grid-template-columns:44mm 1fr;
 
-    gap:7mm;
+    gap:6mm;
 
     padding:
-        7mm
-        14mm
+
         5mm
-        14mm;
+        13mm
+        3mm
+        13mm;
 }
 
 
 /* =========================
-   LEFT SIDE
+   LEFT
 ========================= */
 
 .left{
+
     text-align:center;
 
-    padding-top:2mm;
+    padding-top:1mm;
 }
 
-.photo{
-    width:36mm;
 
-    height:44mm;
+.photo{
+
+    width:35mm;
+
+    height:43mm;
 
     object-fit:cover;
 
-    border:1px solid #ddd;
+    border:1px solid #ccc;
 
     border-radius:2mm;
+
+    display:block;
+
+    margin:auto;
 }
 
+
 .person-name{
+
     margin-top:3mm;
 
     margin-bottom:7mm;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:bold;
+
+    word-break:break-word;
 }
 
-.qr{
-    width:32mm;
 
-    height:32mm;
+.qr{
+
+    width:31mm;
+
+    height:31mm;
 
     object-fit:contain;
+
+    display:block;
+
+    margin:auto;
 }
 
 
@@ -367,55 +446,77 @@ body{
 ========================= */
 
 .info{
+
     width:100%;
 }
 
-.section{
-    background:#b8e1e4;
 
-    min-height:7mm;
+.section{
+
+    width:100%;
+
+    min-height:6.5mm;
 
     padding:
-        1.5mm
-        2mm;
 
-    font-size:13px;
+        1.2mm
+        1.8mm;
+
+    background:#b9e2e5;
+
+    border-bottom:1px solid #d2d2d2;
+
+    font-size:12px;
 
     font-weight:bold;
-
-    border-bottom:1px solid #ddd;
 }
 
+
 .row{
+
+    width:100%;
+
+    min-height:6.7mm;
+
     display:grid;
 
-    grid-template-columns:45mm 1fr;
-
-    min-height:7mm;
+    grid-template-columns:44mm 1fr;
 
     border-bottom:1px solid #ededed;
 
-    font-size:10.5px;
+    font-size:9.5px;
 }
+
 
 .label{
-    padding:1.5mm 1mm;
+
+    padding:1.3mm 1mm;
+
+    word-break:break-word;
 }
+
 
 .value{
-    padding:1.5mm 1mm;
+
+    padding:1.3mm 1mm;
+
+    word-break:break-word;
 }
 
-.address{
-    padding:2mm;
 
-    min-height:18mm;
+.address{
+
+    width:100%;
+
+    min-height:16mm;
+
+    padding:1.8mm;
 
     border-bottom:1px solid #eee;
 
-    font-size:10px;
+    font-size:9px;
 
-    line-height:1.55;
+    line-height:1.45;
 }
 
 
@@ -424,112 +525,139 @@ body{
 ========================= */
 
 .warning{
+
     text-align:center;
 
     color:#d33;
 
-    font-size:8px;
+    font-size:7px;
 
     margin:
-        4mm
-        10mm
+        2mm
+        8mm
         1mm;
 }
 
+
 .footer{
+
     text-align:center;
 
     font-family:Georgia,serif;
 
-    font-size:9px;
+    font-size:8px;
 
-    padding-bottom:3mm;
+    padding-bottom:2mm;
 }
 
 
 /* =========================
-   DOWNLOAD BUTTON
+   DOWNLOAD
 ========================= */
 
 .download-area{
-    text-align:center;
 
-    padding:10px;
+    position:absolute;
 
-    background:#f5f5f5;
+    bottom:0;
+
+    left:0;
+
+    right:0;
+
+    height:14mm;
+
+    background:#f4f4f4;
 
     border-top:1px solid #ddd;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 }
 
+
 .download-btn{
-    background:#1678d4;
+
+    background:#147bd3;
 
     color:white;
 
     border:0;
 
-    padding:11px 25px;
+    padding:7px 20px;
 
-    border-radius:5px;
+    border-radius:4px;
 
-    font-size:14px;
+    font-size:12px;
 
     cursor:pointer;
 }
 
-.download-btn:hover{
-    background:#0b63b6;
+
+.download-btn:disabled{
+
+    opacity:.6;
+
+    cursor:wait;
 }
 
 
 /* =========================
-   PRINT / PDF
+   PRINT
 ========================= */
 
 @page{
+
     size:A4 portrait;
 
     margin:0;
 }
 
+
 @media print{
 
     html,
     body{
+
         width:210mm;
+
         height:297mm;
 
         margin:0;
 
         padding:0;
 
-        background:white;
+        background:#fff;
     }
 
+
     .a4-page{
+
         width:210mm;
 
         height:297mm;
-
-        min-height:297mm;
 
         margin:0;
 
         border:0;
 
         box-shadow:none;
-
-        overflow:hidden;
     }
+
 
     .download-area{
+
         display:none;
     }
+
 
     .menu-button{
+
         display:none;
     }
-
 }
 
 
@@ -540,13 +668,20 @@ body{
 @media(max-width:700px){
 
     body{
-        background:#eee;
+
+        background:#ddd;
+
+        padding:0;
     }
 
+
     .a4-page{
+
         width:100%;
 
-        min-height:auto;
+        height:auto;
+
+        min-height:297mm;
 
         margin:0;
 
@@ -555,532 +690,681 @@ body{
         box-shadow:none;
     }
 
+
     .header{
-        height:115px;
+
+        height:110px;
     }
+
 
     .logo-area{
-        width:110px;
 
-        height:115px;
+        width:105px;
+
+        height:110px;
 
         border-radius:
-            0 60px 60px 0;
+            0 55px 55px 0;
     }
 
-    .logo-placeholder{
-        width:60px;
 
-        height:60px;
+    .logo-placeholder{
+
+        width:58px;
+
+        height:58px;
 
         font-size:8px;
     }
 
+
     .header-content{
-        left:105px;
+
+        left:100px;
     }
+
 
     .header-title{
+
         font-size:18px;
+
+        padding:0 5px;
     }
+
 
     .header-subtitle{
-        font-size:11px;
+
+        font-size:10px;
+
+        padding:0 5px;
     }
+
 
     .search-area{
-        height:170px;
+
+        height:165px;
     }
 
+
     .content{
+
         grid-template-columns:1fr;
 
         padding:20px;
     }
 
+
     .left{
-        margin-bottom:10px;
+
+        margin-bottom:15px;
     }
 
+
     .row{
+
         grid-template-columns:42% 58%;
+    }
+
+
+    .download-area{
+
+        position:relative;
+
+        height:auto;
+
+        padding:12px;
     }
 }
 
 </style>
+
 </head>
 
 
 <body>
 
 
-<div class="a4-page" id="report">
+<div
+    class="a4-page"
+    id="report"
+>
 
 
-    <!-- =====================
-         HEADER
-    ====================== -->
+<!-- =====================================================
+     HEADER
+====================================================== -->
 
-    <header class="header">
-
-
-        <div class="logo-area">
-
-            <!-- পরে নিজের logo এখানে বসাবে -->
-
-            <div class="logo-placeholder">
-
-                YOUR<br>
-                LOGO
-
-            </div>
-
-        </div>
+<header class="header">
 
 
-        <div class="header-content">
+    <!-- LOGO -->
 
-            <h1 class="header-title">
-                Bangladesh Information Portal
-            </h1>
+    <div class="logo-area">
 
-            <div class="header-subtitle">
-                Digital Information Registration System
-            </div>
+        <!--
+        পরে নিজের logo দিতে চাইলে
+        এই div-এর জায়গায় img বসাবে।
 
-        </div>
+        Example:
 
+        <img src="logo.png"
+             class="my-logo">
+        -->
 
-    </header>
+        <div class="logo-placeholder">
 
+            YOUR<br>
 
-
-    <!-- =====================
-         SEARCH
-    ====================== -->
-
-    <section class="search-area">
-
-
-        <button class="menu-button">
-            Menu
-        </button>
-
-
-        <h2 class="search-heading">
-            Select Your Search Category
-        </h2>
-
-
-        <div class="search-option">
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="searchType"
-                    checked
-                >
-
-                Search by ID / Reference No.
-
-            </label>
+            LOGO
 
         </div>
 
+    </div>
 
-        <div class="search-option">
 
-            <label>
 
-                <input
-                    type="radio"
-                    name="searchType"
-                >
+    <!-- HEADER TEXT -->
 
-                Search by Form No.
+    <div class="header-content">
 
-            </label>
+        <h1 class="header-title">
+
+            Bangladesh Information Portal
+
+        </h1>
+
+
+        <div class="header-subtitle">
+
+            Digital Information Registration System
 
         </div>
 
+    </div>
 
-        <div class="search-form">
 
-            <span class="search-label">
-                ID or Reference No*
-            </span>
+</header>
 
+
+
+<!-- =====================================================
+     SEARCH
+====================================================== -->
+
+<section class="search-area">
+
+
+    <button
+        class="menu-button">
+
+        Menu
+
+    </button>
+
+
+
+    <h2 class="search-heading">
+
+        Select Your Search Category
+
+    </h2>
+
+
+
+    <div class="search-option">
+
+        <label>
 
             <input
-                id="searchInput"
-                class="search-input"
-                type="text"
-                placeholder="Enter ID"
+                type="radio"
+                name="searchType"
+                value="id"
+                checked
             >
 
+            Search by ID / Reference No.
 
-            <button
-                class="search-button"
-                onclick="searchData()"
+        </label>
+
+    </div>
+
+
+
+    <div class="search-option">
+
+        <label>
+
+            <input
+                type="radio"
+                name="searchType"
+                value="form"
             >
-                Search
-            </button>
+
+            Search by Form No.
+
+        </label>
+
+    </div>
+
+
+
+    <div class="search-form">
+
+
+        <span class="search-label">
+
+            ID or Reference No*
+
+        </span>
+
+
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Enter ID"
+        >
+
+
+
+        <button
+            class="search-button"
+            onclick="searchData()">
+
+            Search
+
+        </button>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="content">
+
+
+    <!-- =====================
+         LEFT
+    ====================== -->
+
+    <div class="left">
+
+
+        <img
+            id="photo"
+            class="photo"
+
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='240'%3E%3Crect width='100%25' height='100%25' fill='%23eeeeee'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='18' fill='%23777777'%3EPhoto%3C/text%3E%3C/svg%3E"
+
+            alt="Photo"
+        >
+
+
+
+        <div
+            id="personName"
+            class="person-name">
+
+            EXAMPLE PERSON
 
         </div>
 
 
-    </section>
+
+        <img
+            id="qr"
+            class="qr"
+
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='white'/%3E%3Crect x='15' y='15' width='50' height='50' fill='black'/%3E%3Crect x='25' y='25' width='30' height='30' fill='white'/%3E%3Crect x='35' y='35' width='10' height='10' fill='black'/%3E%3Crect x='135' y='15' width='50' height='50' fill='black'/%3E%3Crect x='145' y='25' width='30' height='30' fill='white'/%3E%3Crect x='155' y='35' width='10' height='10' fill='black'/%3E%3Crect x='15' y='135' width='50' height='50' fill='black'/%3E%3Crect x='25' y='145' width='30' height='30' fill='white'/%3E%3Crect x='35' y='155' width='10' height='10' fill='black'/%3E%3Cpath d='M80 20h15v15H80zM105 25h10v20h-10zM75 55h25v10H75zM85 80h15v20H85zM110 70h15v15h-15zM75 110h20v15H75zM105 105h25v10h-25zM145 90h20v15h-20zM165 115h20v15h-20zM100 140h20v20h-20zM75 165h20v15H75zM125 165h15v20h-15z' fill='black'/%3E%3C/svg%3E"
+
+            alt="QR"
+        >
+
+
+    </div>
 
 
 
     <!-- =====================
-         MAIN
+         INFORMATION
     ====================== -->
 
-    <main class="content">
+    <div class="info">
 
 
-        <!-- LEFT -->
+        <!-- IDENTIFICATION -->
 
-        <div class="left">
+        <div class="section">
 
-
-            <img
-                id="photo"
-                class="photo"
-                src="https://via.placeholder.com/200x240"
-                alt="Photo"
-            >
-
-
-            <div
-                id="personName"
-                class="person-name">
-
-                EXAMPLE PERSON
-
-            </div>
-
-
-            <img
-                id="qr"
-                class="qr"
-                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Demo"
-                alt="QR Code"
-            >
-
+            পরিচিতি তথ্য
 
         </div>
 
 
 
-        <!-- RIGHT -->
+        <div class="row">
 
-        <div class="info">
+            <div class="label">
 
+                পরিচিতি নম্বর
 
-            <!-- IDENTIFICATION -->
-
-            <div class="section">
-                পরিচিতি তথ্য
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    পরিচিতি নম্বর
-                </div>
-
-                <div
-                    class="value"
-                    id="idNumber">
-
-                    DEMO-000001
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    রেফারেন্স নম্বর
-                </div>
-
-                <div
-                    class="value"
-                    id="reference">
-
-                    REF-000001
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    জন্মস্থান
-                </div>
-
-                <div
-                    class="value"
-                    id="birthPlace">
-
-                    Example District
-
-                </div>
-
-            </div>
-
-
-
-            <!-- PERSONAL -->
-
-            <div class="section">
-                ব্যক্তিগত তথ্য
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    নাম (বাংলা)
-                </div>
-
-                <div
-                    class="value"
-                    id="nameBn">
-
-                    উদাহরণ নাম
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    নাম (ইংরেজি)
-                </div>
-
-                <div
-                    class="value"
-                    id="nameEn">
-
-                    EXAMPLE NAME
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    জন্ম তারিখ
-                </div>
-
-                <div
-                    class="value"
-                    id="dob">
-
-                    01 Jan 2000
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    পিতার নাম
-                </div>
-
-                <div
-                    class="value"
-                    id="father">
-
-                    Example Father
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    মাতার নাম
-                </div>
-
-                <div
-                    class="value"
-                    id="mother">
-
-                    Example Mother
-
-                </div>
-
-            </div>
-
-
-
-            <!-- OTHER -->
-
-            <div class="section">
-                অন্যান্য তথ্য
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    রক্তের গ্রুপ
-                </div>
-
-                <div
-                    class="value"
-                    id="blood">
-
-                    O+
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    স্বামী/স্ত্রীর নাম
-                </div>
-
-                <div
-                    class="value"
-                    id="spouse">
-
-                    -
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    পেশা
-                </div>
-
-                <div
-                    class="value"
-                    id="occupation">
-
-                    Student
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="label">
-                    অন্যান্য
-
-                </div>
-
-                <div
-                    class="value"
-                    id="other">
-
-                    Demo Information
-
-                </div>
-
-            </div>
-
-
-
-            <!-- PRESENT ADDRESS -->
-
-            <div class="section">
-                বর্তমান ঠিকানা
             </div>
 
 
             <div
-                class="address"
-                id="presentAddress">
+                class="value"
+                id="idNumber">
 
-                Example Village, Example Post Office,
-                Example Upazila, Example District.
-
-            </div>
-
-
-
-            <!-- PERMANENT ADDRESS -->
-
-            <div class="section">
-                স্থায়ী ঠিকানা
-            </div>
-
-
-            <div
-                class="address"
-                id="permanentAddress">
-
-                Example Village, Example Post Office,
-                Example Upazila, Example District.
+                DEMO-000001
 
             </div>
-
 
         </div>
 
 
-    </main>
+
+        <div class="row">
+
+            <div class="label">
+
+                রেফারেন্স নম্বর
+
+            </div>
+
+
+            <div
+                class="value"
+                id="reference">
+
+                REF-000001
+
+            </div>
+
+        </div>
 
 
 
-    <!-- FOOTER -->
+        <div class="row">
 
-    <div class="warning">
+            <div class="label">
 
-        DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY
+                জন্মস্থান
+
+            </div>
+
+
+            <div
+                class="value"
+                id="birthPlace">
+
+                Example District
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PERSONAL -->
+
+        <div class="section">
+
+            ব্যক্তিগত তথ্য
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                নাম (বাংলা)
+
+            </div>
+
+
+            <div
+                class="value"
+                id="nameBn">
+
+                উদাহরণ নাম
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                নাম (ইংরেজি)
+
+            </div>
+
+
+            <div
+                class="value"
+                id="nameEn">
+
+                EXAMPLE NAME
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                জন্ম তারিখ
+
+            </div>
+
+
+            <div
+                class="value"
+                id="dob">
+
+                01 Jan 2000
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                পিতার নাম
+
+            </div>
+
+
+            <div
+                class="value"
+                id="father">
+
+                Example Father
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                মাতার নাম
+
+            </div>
+
+
+            <div
+                class="value"
+                id="mother">
+
+                Example Mother
+
+            </div>
+
+        </div>
+
+
+
+        <!-- OTHER -->
+
+        <div class="section">
+
+            অন্যান্য তথ্য
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                রক্তের গ্রুপ
+
+            </div>
+
+
+            <div
+                class="value"
+                id="blood">
+
+                O+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                স্বামী/স্ত্রীর নাম
+
+            </div>
+
+
+            <div
+                class="value"
+                id="spouse">
+
+                -
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                পেশা
+
+            </div>
+
+
+            <div
+                class="value"
+                id="occupation">
+
+                Student
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="label">
+
+                অন্যান্য
+
+            </div>
+
+
+            <div
+                class="value"
+                id="other">
+
+                Demo Information
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PRESENT ADDRESS -->
+
+        <div class="section">
+
+            বর্তমান ঠিকানা
+
+        </div>
+
+
+
+        <div
+            class="address"
+            id="presentAddress">
+
+            Example Village, Example Post Office,
+            Example Upazila, Example District.
+
+        </div>
+
+
+
+        <!-- PERMANENT ADDRESS -->
+
+        <div class="section">
+
+            স্থায়ী ঠিকানা
+
+        </div>
+
+
+
+        <div
+            class="address"
+            id="permanentAddress">
+
+            Example Village, Example Post Office,
+            Example Upazila, Example District.
+
+        </div>
+
 
     </div>
 
 
-    <div class="footer">
-
-        This is a software generated demonstration report.
-
-    </div>
+</main>
 
 
 
-    <!-- DOWNLOAD -->
+<!-- =====================================================
+     FOOTER
+====================================================== -->
 
-    <div class="download-area">
+<div class="warning">
 
-        <button
-            class="download-btn"
-            onclick="downloadPDF()">
+    DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY
 
-            Download A4 PDF
+</div>
 
-        </button>
 
-    </div>
+<div class="footer">
+
+    This is a software generated demonstration report.
+
+</div>
+
+
+
+<!-- =====================================================
+     DOWNLOAD
+====================================================== -->
+
+<div class="download-area">
+
+    <button
+        id="downloadBtn"
+        class="download-btn"
+        onclick="downloadPDF()">
+
+        Download A4 PDF
+
+    </button>
+
+</div>
 
 
 </div>
@@ -1089,17 +1373,17 @@ body{
 
 <script>
 
-/* =========================
+/* =====================================================
    DEMO DATA
-========================= */
+===================================================== */
 
 const data = {
 
     photo:
-        "https://via.placeholder.com/200x240",
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='240'%3E%3Crect width='100%25' height='100%25' fill='%23eeeeee'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='18' fill='%23777777'%3EPhoto%3C/text%3E%3C/svg%3E",
 
     qr:
-        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Demo",
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='white'/%3E%3Crect x='15' y='15' width='50' height='50' fill='black'/%3E%3Crect x='25' y='25' width='30' height='30' fill='white'/%3E%3Crect x='35' y='35' width='10' height='10' fill='black'/%3E%3Crect x='135' y='15' width='50' height='50' fill='black'/%3E%3Crect x='145' y='25' width='30' height='30' fill='white'/%3E%3Crect x='155' y='35' width='10' height='10' fill='black'/%3E%3Crect x='15' y='135' width='50' height='50' fill='black'/%3E%3Crect x='25' y='145' width='30' height='30' fill='white'/%3E%3Crect x='35' y='155' width='10' height='10' fill='black'/%3E%3Cpath d='M80 20h15v15H80zM105 25h10v20h-10zM75 55h25v10H75zM85 80h15v20H85zM110 70h15v15h-15zM75 110h20v15H75zM105 105h25v10h-25zM145 90h20v15h-20zM165 115h20v15h-20zM100 140h20v20h-20zM75 165h20v15H75zM125 165h15v20h-15z' fill='black'/%3E%3C/svg%3E",
 
     personName:
         "EXAMPLE PERSON",
@@ -1149,9 +1433,10 @@ const data = {
 };
 
 
-/* =========================
-   PUT DATA INTO DESIGN
-========================= */
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
 
 function loadData(){
 
@@ -1209,15 +1494,13 @@ function loadData(){
 }
 
 
-/* Load demo data */
-
 loadData();
 
 
 
-/* =========================
+/* =====================================================
    SEARCH
-========================= */
+===================================================== */
 
 function searchData(){
 
@@ -1227,39 +1510,334 @@ function searchData(){
         .value
         .trim();
 
+
     if(!value){
 
-        alert("Please enter a reference number.");
+        alert(
+            "Please enter a reference number."
+        );
 
         return;
+
     }
 
+
+    console.log(
+        "Search value:",
+        value
+    );
+
+
     /*
-      পরে এখানে API call বসবে:
+      পরে এখানে তোমার অনুমোদিত API
+      connection বসানো যাবে।
+
+      Example:
 
       fetch("YOUR_API_URL")
-      ...
-    */
+      .then(response => response.json())
+      .then(result => {
 
-    console.log("Search:", value);
+          // result → data
+
+      });
+    */
 
 }
 
 
 
-/* =========================
-   A4 PDF
-========================= */
+/* =====================================================
+   WAIT FOR IMAGES
+===================================================== */
 
-function downloadPDF(){
+function waitForImages(element){
 
-    /*
-      Browser-এর Print dialog খুলবে।
-      সেখানে "Save as PDF" নির্বাচন করলে
-      পুরো page A4 PDF হিসেবে save হবে।
-    */
+    const images =
+        element.querySelectorAll("img");
 
-    window.print();
+
+    return Promise.all(
+
+        [...images].map(img => {
+
+            if(img.complete){
+
+                return Promise.resolve();
+
+            }
+
+
+            return new Promise(resolve => {
+
+                img.onload = resolve;
+
+                img.onerror = resolve;
+
+            });
+
+        })
+
+    );
+
+}
+
+
+
+/* =====================================================
+   DOWNLOAD A4 PDF
+===================================================== */
+
+async function downloadPDF(){
+
+    const button =
+        document.getElementById(
+            "downloadBtn"
+        );
+
+
+    const downloadArea =
+        document.querySelector(
+            ".download-area"
+        );
+
+
+    try{
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Creating PDF...";
+
+
+        const element =
+            document.getElementById(
+                "report"
+            );
+
+
+        /*
+          Download button hide
+        */
+
+        downloadArea.style.display =
+            "none";
+
+
+        /*
+          Wait for images
+        */
+
+        await waitForImages(
+            element
+        );
+
+
+        /*
+          Small delay for rendering
+        */
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    300
+                )
+        );
+
+
+        /*
+          Capture page
+        */
+
+        const canvas =
+            await html2canvas(
+                element,
+                {
+
+                    scale:2,
+
+                    useCORS:true,
+
+                    allowTaint:false,
+
+                    backgroundColor:
+                        "#ffffff",
+
+                    logging:false,
+
+                    imageTimeout:
+                        15000,
+
+                    width:
+                        element.scrollWidth,
+
+                    height:
+                        element.scrollHeight
+
+                }
+            );
+
+
+        /*
+          Canvas → JPG
+        */
+
+        const image =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.95
+            );
+
+
+        /*
+          Create A4 PDF
+        */
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+
+                orientation:
+                    "portrait",
+
+                unit:
+                    "mm",
+
+                format:
+                    "a4",
+
+                compress:
+                    true
+
+            });
+
+
+        const pageWidth =
+            210;
+
+        const pageHeight =
+            297;
+
+
+        /*
+          Canvas ratio
+        */
+
+        const ratio =
+            canvas.width /
+            canvas.height;
+
+
+        let width =
+            pageWidth;
+
+        let height =
+            width / ratio;
+
+
+        /*
+          Fit inside A4
+        */
+
+        if(
+            height >
+            pageHeight
+        ){
+
+            height =
+                pageHeight;
+
+            width =
+                height * ratio;
+
+        }
+
+
+        const x =
+            (pageWidth -
+             width) / 2;
+
+
+        const y =
+            (pageHeight -
+             height) / 2;
+
+
+        /*
+          Add image
+        */
+
+        pdf.addImage(
+
+            image,
+
+            "JPEG",
+
+            x,
+
+            y,
+
+            width,
+
+            height,
+
+            undefined,
+
+            "FAST"
+
+        );
+
+
+        /*
+          Download
+        */
+
+        pdf.save(
+            "information-report-A4.pdf"
+        );
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "PDF Error:",
+            error
+        );
+
+
+        alert(
+            "PDF তৈরি করতে সমস্যা হয়েছে।"
+        );
+
+    }
+
+
+    finally{
+
+        /*
+          Restore button
+        */
+
+        downloadArea.style.display =
+            "flex";
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Download A4 PDF";
+
+    }
 
 }
 
@@ -1267,3 +1845,5 @@ function downloadPDF(){
 
 </body>
 </html>
+
+এবার "index.html" নামে save করে Chrome-এ খুলে "Download A4 PDF" চাপো। এই version-এ external placeholder/QR image বাদ দিয়ে demo image data-URI ব্যবহার করেছি, যাতে PDF তৈরির সময় cross-origin image-এর কারণে সাদা হয়ে যাওয়ার সমস্যা না হয়। পরে API থেকে ছবি এলে সেই image-এর ক্ষেত্রে CORS enabled থাকা দরকার।
