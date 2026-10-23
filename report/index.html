@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Information Report</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 15px;
+  background: #e7e7e7;
+  color: #333;
+  font-family: Arial, "Noto Sans Bengali", sans-serif;
+  font-size: 12px;
+}
+
+.page {
+  width: 100%;
+  max-width: 850px;
+  min-height: 1120px;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 1px 8px #bbb;
+  position: relative;
+}
+
+.header {
+  min-height: 150px;
+  background: linear-gradient(#b9c8bb, #214b32);
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  gap: 20px;
+  color: white;
+}
+
+.logo-circle {
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #f6f8f4;
+  border: 1px solid #d7e0d5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-inner {
+  width: 78px;
+  height: 78px;
+  border: 1px solid #315e43;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #315e43;
+  font-size: 9px;
+}
+
+.heading {
+  flex: 1;
+  text-align: center;
+}
+
+.heading h1 {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.heading p {
+  color: #fff36a;
+  font-size: 14px;
+  margin: 0;
+}
+
+.search-area {
+  padding: 15px 20px 20px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.search-title {
+  color: #79516c;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.category {
+  margin: 5px;
+  color: #777;
+}
+
+.search-form {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.search-form label {
+  color: #754b5d;
+}
+
+.search-form input {
+  width: 145px;
+  height: 28px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  font-size: 12px;
+  background: white;
+}
+
+.search-form button {
+  background: #229b50;
+  color: white;
+  border: 0;
+  padding: 7px 14px;
+  font-size: 11px;
+}
+
+.menu {
+  position: absolute;
+  top: 166px;
+  right: 16px;
+  background: #1683d7;
+  color: white;
+  border: 0;
+  padding: 5px 15px;
+  font-size: 10px;
+}
+
+.report-content {
+  display: grid;
+  grid-template-columns: 155px 1fr;
+  gap: 15px;
+  padding: 30px 35px 100px;
+}
+
+.left-column {
+  text-align: center;
+}
+
+.photo {
+  width: 125px;
+  height: 160px;
+  margin: 5px auto 10px;
+  border: 1px solid #d7d7d7;
+  background: #f1f1f1;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+}
+
+.head-shape {
+  width: 45px;
+  height: 45px;
+  background: #b9b9b9;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+.body-shape {
+  width: 62px;
+  height: 45px;
+  background: #b9b9b9;
+  border-radius: 28px 28px 16px 16px;
+}
+
+.photo small {
+  font-size: 8px;
+  margin-top: 8px;
+}
+
+.person-name {
+  font-size: 12px;
+  margin: 12px 0 24px;
+}
+
+.qr {
+  width: 112px;
+  height: 112px;
+  margin: 0 auto;
+  display: block;
+}
+
+.details {
+  min-width: 0;
+}
+
+.section-title {
+  background: #b8e1e2;
+  padding: 7px 9px;
+  font-weight: bold;
+  font-size: 13px;
+  margin: 0 0 4px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  min-height: 25px;
+  border-bottom: 1px solid #ededed;
+  align-items: center;
+  padding: 4px 5px;
+}
+
+.info-row .value {
+  overflow-wrap: anywhere;
+}
+
+.address {
+  padding: 8px 5px 28px;
+  min-height: 65px;
+  line-height: 1.8;
+}
+
+.watermark {
+  border-top: 1px solid #eee;
+  margin-top: 5px;
+  padding: 20px 5px;
+  text-align: center;
+  font-size: 8px;
+  color: #a66b6b;
+}
+
+.watermark small {
+  display: block;
+  color: #777;
+  margin-top: 5px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 55px;
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.footer button {
+  padding: 9px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.back {
+  background: #555;
+}
+
+.download {
+  background: #1685d5;
+}
+
+@media (max-width: 520px) {
+  body {
+    padding: 8px;
+  }
+
+  .page {
+    min-height: 950px;
+  }
+
+  .header {
+    min-height: 110px;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .logo-circle {
+    width: 78px;
+    height: 78px;
+  }
+
+  .logo-inner {
+    width: 52px;
+    height: 52px;
+    font-size: 7px;
+  }
+
+  .heading h1 {
+    font-size: 16px;
+  }
+
+  .heading p {
+    font-size: 11px;
+  }
+
+  .menu {
+    top: 124px;
+    right: 10px;
+  }
+
+  .search-area {
+    padding: 12px 8px 18px;
+  }
+
+  .search-form input {
+    width: 105px;
+  }
+
+  .report-content {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 8px;
+    padding: 28px 10px 85px;
+  }
+
+  .photo {
+    width: 95px;
+    height: 130px;
+  }
+
+  .qr {
+    width: 85px;
+    height: 85px;
+  }
+
+  .info-row {
+    grid-template-columns: 42% 58%;
+    font-size: 10px;
+    padding: 5px 3px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .address {
+    font-size: 10px;
+  }
+}
+
+@media print {
+  body {
+    padding: 0;
+    background: white;
+  }
+
+  .page {
+    max-width: none;
+    box-shadow: none;
+  }
+
+  .footer {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div class="logo-circle">
+      <div class="logo-inner">YOUR<br>LOGO</div>
+    </div>
+
+    <div class="heading">
+      <h1>Bangladesh Information Portal</h1>
+      <p>Digital Information Registration System</p>
+    </div>
+  </header>
+
+  <button class="menu" type="button">Menu</button>
+
+  <section class="search-area">
+    <div class="search-title">Select Your Search Category</div>
+
+    <div class="category">
+      <label><input type="radio" name="category" checked>
+      Search by Reference No.</label>
+    </div>
+
+    <div class="category">
+      <label><input type="radio" name="category">
+      Search by Form No.</label>
+    </div>
+
+    <div class="search-form">
+      <label for="reference">Reference No*</label>
+      <input id="reference" type="text" placeholder="Enter Reference No.">
+      <input type="date" aria-label="Date">
+      <button type="button">Search</button>
+    </div>
+  </section>
+
+  <main class="report-content">
+
+    <aside class="left-column">
+      <div class="photo">
+        <div class="head-shape"></div>
+        <div class="body-shape"></div>
+        <small>DEMO PHOTO</small>
+      </div>
+
+      <div class="person-name">DEMO USER</div>
+
+      <!-- Decorative QR-style graphic; not a real identification code -->
+      <svg class="qr" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-label="Decorative demo QR graphic">
+        <rect width="100" height="100" fill="white"/>
+        <g fill="black">
+          <path d="M3 3h28v28H3z M8 8v18h18V8z M12 12h10v10H12z"/>
+          <path d="M69 3h28v28H69z M74 8v18h18V8z M78 12h10v10H78z"/>
+          <path d="M3 69h28v28H3z M8 74v18h18V74z M12 78h10v10H12z"/>
+          <path d="M38 3h6v6h-6z M50 3h6v12h-6z M38 15h12v6H38z
+                   M44 21h6v12h-6z M56 21h6v6h-6z
+                   M38 38h6v6h-6z M50 38h6v6h-6z
+                   M62 38h6v12h-6z M74 38h6v6h-6z
+                   M86 38h11v6H86z M38 50h12v6H38z
+                   M56 50h6v6h-6z M74 50h6v12h-6z
+                   M86 50h6v12h-6z M38 62h6v6h-6z
+                   M50 62h12v6H50z M62 74h6v6h-6z
+                   M74 68h6v6h-6z M86 68h11v6H86z
+                   M38 80h6v6h-6z M50 80h6v6h-6z
+                   M56 86h12v6H56z M74 86h6v11h-6z
+                   M86 80h11v6H86z M38 92h12v5H38z"/>
+        </g>
+      </svg>
+    </aside>
+
+    <section class="details">
+
+      <div class="section-title">পরিচিতি তথ্য</div>
+      <div class="info-row"><span>পরিচিতি নম্বর</span><span class="value">DEMO-663</span></div>
+      <div class="info-row"><span>রেফারেন্স নম্বর</span><span class="value">663</span></div>
+      <div class="info-row"><span>অঞ্চল</span><span class="value">ঢাকা</span></div>
+
+      <div class="section-title">ব্যক্তিগত তথ্য</div>
+      <div class="info-row"><span>নাম (বাংলা)</span><span class="value">ডেমো ব্যবহারকারী</span></div>
+      <div class="info-row"><span>নাম (ইংরেজি)</span><span class="value">DEMO USER</span></div>
+      <div class="info-row"><span>জন্ম তারিখ</span><span class="value">2026-10-23</span></div>
+      <div class="info-row"><span>পিতার নাম</span><span class="value">ডেমো পিতা</span></div>
+      <div class="info-row"><span>মাতার নাম</span><span class="value">ডেমো মাতা</span></div>
+
+      <div class="section-title">অন্যান্য তথ্য</div>
+      <div class="info-row"><span>রক্তের গ্রুপ</span><span class="value">O+</span></div>
+      <div class="info-row"><span>পেশা</span><span class="value">Student</span></div>
+      <div class="info-row"><span>বিবরণ</span><span class="value">Demo information</span></div>
+
+      <div class="section-title">বর্তমান ঠিকানা</div>
+      <div class="address">Demo Present Address, Bangladesh</div>
+
+      <div class="section-title">স্থায়ী ঠিকানা</div>
+      <div class="address">Demo Permanent Address, Bangladesh</div>
+
+      <div class="watermark">
+        DEMO REPORT — FOR DEVELOPMENT PURPOSES ONLY
+        <small>This is a software-generated demonstration report.</small>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <button class="back" type="button">Back</button>
+    <button class="download" type="button">Download A4 PDF</button>
+  </footer>
+
+</div>
+
+</body>
+</html>
