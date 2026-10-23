@@ -2,1883 +2,1001 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Information Portal Demo</title>
 
-<title>Information Report - Demo</title>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-}
-
-html,body{
-    margin:0;
-    padding:0;
-}
-
+*{box-sizing:border-box}
 body{
-    background:#e5e5e5;
-    font-family:Arial,"Noto Sans Bengali",sans-serif;
-    color:#222;
+ margin:0;background:#e9e9e9;
+ font-family:Arial,sans-serif;color:#333
 }
+button,input{font:inherit}
 
-
-/* =========================
-   A4 PAGE
-========================= */
-
-.a4-page{
-    width:210mm;
-    height:297mm;
-    margin:20px auto;
-    background:#fff;
-    position:relative;
-    overflow:hidden;
-    border:1px solid #bbb;
-    box-shadow:0 0 12px rgba(0,0,0,.18);
+.page{
+ width:min(100%,900px);
+ margin:20px auto;
+ background:white;
+ min-height:100vh;
+ box-shadow:0 2px 10px #bbb;
 }
-
-
-/* =========================
-   HEADER
-========================= */
 
 .header{
-    width:100%;
-    height:40mm;
-    position:relative;
-    overflow:hidden;
+ height:120px;
+ background:linear-gradient(90deg,#edf4ef,#245333);
+ display:flex;
+ align-items:center;
+ padding:15px 30px;
+ position:relative;
+}
+.logo{
+ width:90px;height:90px;border-radius:50%;
+ background:#fff;
+ border:2px solid #477052;
+ display:flex;align-items:center;justify-content:center;
+ text-align:center;font-size:9px;color:#477052;
+}
+.headerText{
+ flex:1;text-align:center;color:white;
+}
+.headerText h1{font-size:21px;margin:0 0 8px}
+.headerText p{margin:0;color:#e8df31;font-size:13px}
 
-    background:
-        linear-gradient(
-            to bottom,
-            #b5c2b6 0%,
-            #789078 42%,
-            #24462d 100%
-        );
+.dashboard{
+ padding:35px;
+}
+.dashboard h2{text-align:center;color:#285b3a}
+
+.balance{
+ background:linear-gradient(135deg,#168548,#063c20);
+ color:white;border-radius:12px;padding:22px;
+ display:flex;justify-content:space-between;align-items:center;
+ margin:20px 0;
+}
+.coin{
+ font-size:28px;font-weight:bold;
+}
+.copyCard{
+ border:1px solid #ddd;
+ border-radius:12px;
+ padding:25px;
+ cursor:pointer;
+ transition:.2s;
+}
+.copyCard:hover{transform:translateY(-2px);box-shadow:0 4px 15px #ccc}
+.copyCard h3{margin-top:0;color:#168548}
+
+.formPage{display:none;padding:25px 45px 40px}
+
+.formTitle{
+ text-align:center;
+ color:#39704c;
+ margin-bottom:25px;
+}
+.formBox{
+ max-width:500px;
+ margin:auto;
+}
+label{display:block;font-size:14px;margin:15px 0 6px}
+input{
+ width:100%;padding:13px;
+ border:1px solid #bbb;border-radius:5px;
+}
+.searchBtn{
+ margin-top:20px;width:100%;
+ padding:13px;border:0;border-radius:5px;
+ background:#249b52;color:#fff;cursor:pointer;
+}
+.searchBtn:disabled{opacity:.6}
+
+.backBtn{
+ border:0;background:#555;color:white;
+ padding:9px 18px;border-radius:4px;
 }
 
-.header::after{
-    content:"";
-    position:absolute;
-    inset:0;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.22),
-            transparent 38%,
-            rgba(0,0,0,.12)
-        );
-
-    pointer-events:none;
+.reportPage{
+ display:none;
+ padding-bottom:65px;
 }
 
-
-/* LOGO */
-
-.logo-area{
-    position:absolute;
-    left:0;
-    top:0;
-
-    width:42mm;
-    height:40mm;
-
-    background:#e9eee9;
-
-    border-radius:0 21mm 21mm 0;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    z-index:2;
+.report{
+ width:210mm;
+ min-height:297mm;
+ max-width:100%;
+ margin:auto;
+ background:#fff;
+ position:relative;
+ overflow:hidden;
 }
 
-.logo-placeholder{
-    width:23mm;
-    height:23mm;
+.reportHeader{
+ height:120px;
+ background:linear-gradient(90deg,#edf4ef,#245333);
+ display:flex;align-items:center;
+ padding:15px 30px;
+}
+.reportHeader .logo{
+ width:90px;height:90px;
+}
+.reportHeaderText{
+ flex:1;text-align:center;color:white;
+}
+.reportHeaderText h1{font-size:20px;margin:0 0 7px}
+.reportHeaderText p{color:#e8df31;margin:0;font-size:12px}
 
-    border-radius:50%;
-
-    background:#fff;
-
-    border:2px solid #28663b;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-
-    color:#28663b;
-
-    font-size:9px;
-    font-weight:bold;
+.reportBody{
+ padding:22px 42px;
 }
 
-
-/* HEADER TEXT */
-
-.header-content{
-    position:absolute;
-
-    left:42mm;
-    right:0;
-    top:0;
-    bottom:0;
-
-    display:flex;
-    flex-direction:column;
-
-    justify-content:center;
-    align-items:center;
-
-    z-index:2;
+.reportGrid{
+ display:grid;
+ grid-template-columns:115px 1fr;
+ gap:20px;
 }
 
-.header-title{
-    margin:0;
-
-    color:#fff;
-
-    font-size:24px;
-    font-weight:bold;
-
-    text-align:center;
-
-    text-shadow:1px 2px 3px rgba(0,0,0,.4);
-}
-
-.header-subtitle{
-    margin-top:5px;
-
-    color:#f0df35;
-
-    font-size:15px;
-    font-weight:bold;
-
-    text-align:center;
-}
-
-
-/* =========================
-   SEARCH AREA
-========================= */
-
-.search-area{
-    width:100%;
-    height:38mm;
-
-    position:relative;
-
-    background:#fff;
-
-    text-align:center;
-
-    padding-top:3mm;
-}
-
-.menu-button{
-    position:absolute;
-
-    right:4mm;
-    top:3mm;
-
-    background:#147bd3;
-
-    color:#fff;
-
-    border:0;
-
-    padding:5px 13px;
-
-    font-size:9px;
-}
-
-.search-heading{
-    margin:0 0 1.5mm;
-
-    color:#9d416e;
-
-    font-size:14px;
-    font-weight:bold;
-}
-
-.search-option{
-    color:#438d7c;
-
-    font-size:10px;
-
-    line-height:16px;
-}
-
-.search-option input{
-    vertical-align:middle;
-}
-
-.search-form{
-    margin-top:3mm;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    gap:5px;
-}
-
-.search-label{
-    color:#a53c4b;
-
-    font-size:10px;
-
-    font-weight:bold;
-}
-
-.search-input{
-    width:43mm;
-    height:7mm;
-
-    border:1px solid #ddd;
-
-    padding:3px 6px;
-
-    font-size:10px;
-
-    outline:none;
-}
-
-.dob-input{
-    width:30mm;
-    height:7mm;
-
-    border:1px solid #ddd;
-
-    font-size:9px;
-}
-
-.search-button{
-    height:7mm;
-
-    padding:0 12px;
-
-    background:#20a54a;
-
-    color:#fff;
-
-    border:0;
-
-    cursor:pointer;
-
-    font-size:9px;
-}
-
-
-/* =========================
-   CONTENT
-========================= */
-
-.content{
-    display:grid;
-
-    grid-template-columns:44mm 1fr;
-
-    gap:6mm;
-
-    padding:5mm 13mm 3mm;
-}
-
-
-/* LEFT */
-
-.left{
-    text-align:center;
-
-    padding-top:1mm;
-}
-
+.leftCol{text-align:center}
 .photo{
-    width:35mm;
-    height:43mm;
-
-    object-fit:cover;
-
-    border:1px solid #ccc;
-
-    border-radius:2mm;
-
-    display:block;
-
-    margin:auto;
+ width:105px;height:130px;
+ border:1px solid #ccc;
+ border-radius:5px;
+ overflow:hidden;
+ margin:auto;
 }
-
-.person-name{
-    margin-top:3mm;
-    margin-bottom:7mm;
-
-    font-size:11px;
-
-    font-weight:bold;
-
-    word-break:break-word;
+.photo img{
+ width:100%;height:100%;object-fit:cover
 }
-
-
-/* =========================
-   QR
-========================= */
-
-.qr-box{
-    width:31mm;
-    height:31mm;
-
-    margin:auto;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    background:#fff;
+.name{
+ font-size:13px;
+ margin:10px 0 18px;
+ font-weight:bold;
 }
-
 #qrcode{
-    width:31mm;
-    height:31mm;
+ display:flex;
+ justify-content:center;
 }
-
 #qrcode img{
-    width:31mm !important;
-    height:31mm !important;
+ width:92px!important;
+ height:92px!important;
 }
 
-
-/* =========================
-   INFO
-========================= */
-
-.info{
-    width:100%;
+.sectionTitle{
+ background:#b7e1e4;
+ padding:6px 8px;
+ font-weight:bold;
+ font-size:13px;
+ margin-top:0;
 }
 
-.section{
-    width:100%;
-
-    min-height:6.5mm;
-
-    padding:1.2mm 1.8mm;
-
-    background:#b9e2e5;
-
-    border-bottom:1px solid #d2d2d2;
-
-    font-size:12px;
-
-    font-weight:bold;
+.infoTable{
+ width:100%;
+ border-collapse:collapse;
+ font-size:11px;
 }
-
-.row{
-    width:100%;
-
-    min-height:6.7mm;
-
-    display:grid;
-
-    grid-template-columns:44mm 1fr;
-
-    border-bottom:1px solid #ededed;
-
-    font-size:9.5px;
+.infoTable td{
+ padding:6px 4px;
+ border-bottom:1px solid #eee;
 }
-
-.label{
-    padding:1.3mm 1mm;
-}
-
-.value{
-    padding:1.3mm 1mm;
-
-    word-break:break-word;
+.infoTable td:first-child{
+ width:38%;
 }
 
 .address{
-    width:100%;
-
-    min-height:16mm;
-
-    padding:1.8mm;
-
-    border-bottom:1px solid #eee;
-
-    font-size:9px;
-
-    line-height:1.45;
+ margin-top:18px;
+ font-size:11px;
+}
+.addressText{
+ padding:10px 5px 15px;
+ min-height:35px;
 }
 
-
-/* =========================
-   FOOTER
-========================= */
-
-.warning{
-    text-align:center;
-
-    color:#d33;
-
-    font-size:7px;
-
-    margin:2mm 8mm 1mm;
+.demoMark{
+ margin-top:25px;
+ text-align:center;
+ color:#c65b5b;
+ font-size:9px;
+ border-top:1px solid #eee;
+ padding-top:12px;
 }
 
-.footer{
-    text-align:center;
-
-    font-family:Georgia,serif;
-
-    font-size:8px;
-
-    padding-bottom:2mm;
+.bottomBar{
+ position:fixed;
+ bottom:0;
+ left:0;right:0;
+ background:#f4f4f4;
+ border-top:1px solid #ddd;
+ padding:10px;
+ text-align:center;
 }
-
-
-/* =========================
-   DOWNLOAD
-========================= */
-
-.download-area{
-    position:absolute;
-
-    bottom:0;
-
-    left:0;
-    right:0;
-
-    height:14mm;
-
-    background:#f4f4f4;
-
-    border-top:1px solid #ddd;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:10px;
+.bottomBar button{
+ margin:0 5px;
+ padding:10px 18px;
+ border:0;border-radius:4px;
 }
-
-.download-btn,
-.back-btn{
-    border:0;
-
-    color:white;
-
-    padding:7px 20px;
-
-    border-radius:4px;
-
-    font-size:12px;
-
-    cursor:pointer;
-}
-
-.download-btn{
-    background:#147bd3;
-}
-
-.back-btn{
-    background:#555;
-}
-
-
-/* =========================
-   TOAST
-========================= */
+.download{background:#168bd0;color:white}
+.back{background:#555;color:white}
 
 .toast{
-    position:fixed;
-
-    left:50%;
-    bottom:25px;
-
-    transform:translate(-50%,120px);
-
-    min-width:250px;
-
-    max-width:90%;
-
-    padding:13px 18px;
-
-    background:#222;
-
-    color:#fff;
-
-    border-radius:8px;
-
-    text-align:center;
-
-    font-size:14px;
-
-    z-index:99999;
-
-    opacity:0;
-
-    transition:.3s;
+ position:fixed;
+ right:20px;bottom:75px;
+ background:#333;color:#fff;
+ padding:12px 18px;
+ border-radius:5px;
+ display:none;
+ z-index:9999;
 }
 
-.toast.show{
-    transform:translate(-50%,0);
-
-    opacity:1;
-}
-
-.toast.error{
-    background:#d93025;
-}
-
-.toast.success{
-    background:#188038;
-}
-
-.toast.info{
-    background:#147bd3;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:700px){
-
-    body{
-        background:#ddd;
-    }
-
-    .a4-page{
-        width:100%;
-
-        height:auto;
-
-        min-height:297mm;
-
-        margin:0;
-
-        border:0;
-
-        box-shadow:none;
-    }
-
-    .header{
-        height:110px;
-    }
-
-    .logo-area{
-        width:105px;
-
-        height:110px;
-
-        border-radius:0 55px 55px 0;
-    }
-
-    .logo-placeholder{
-        width:58px;
-        height:58px;
-    }
-
-    .header-content{
-        left:100px;
-    }
-
-    .header-title{
-        font-size:18px;
-    }
-
-    .header-subtitle{
-        font-size:10px;
-    }
-
-    .search-area{
-        height:175px;
-    }
-
-    .search-form{
-        flex-wrap:wrap;
-    }
-
-    .content{
-        grid-template-columns:1fr;
-
-        padding:20px;
-    }
-
-    .left{
-        margin-bottom:15px;
-    }
-
-    .row{
-        grid-template-columns:42% 58%;
-    }
-
-    .download-area{
-        position:relative;
-
-        height:auto;
-
-        padding:12px;
-    }
-}
-
-
-/* =========================
-   PRINT
-========================= */
-
-@page{
-    size:A4 portrait;
-    margin:0;
-}
-
-@media print{
-
-    html,body{
-        width:210mm;
-        height:297mm;
-
-        margin:0;
-
-        background:#fff;
-    }
-
-    .a4-page{
-        width:210mm;
-        height:297mm;
-
-        margin:0;
-
-        border:0;
-
-        box-shadow:none;
-    }
-
-    .download-area{
-        display:none;
-    }
-
-    .toast{
-        display:none;
-    }
+@media(max-width:600px){
+ .page{margin:0;width:100%}
+ .dashboard{padding:25px 18px}
+ .formPage{padding:25px 20px}
+ .reportBody{padding:18px 20px}
+ .reportGrid{grid-template-columns:90px 1fr;gap:12px}
+ .photo{width:85px;height:110px}
+ .header{height:110px;padding:10px 15px}
+ .logo{width:75px;height:75px}
+ .headerText h1{font-size:16px}
 }
 </style>
 </head>
 
-
 <body>
 
+<div class="page">
 
-<!-- =================================================
-     A4 REPORT
-================================================= -->
+<!-- DASHBOARD -->
+<section id="dashboard">
 
-<div
-    class="a4-page"
-    id="report"
->
+<div class="header">
+ <div class="logo">YOUR<br>LOGO</div>
+ <div class="headerText">
+  <h1>Information Portal</h1>
+  <p>Digital Information System</p>
+ </div>
+</div>
 
+<div class="dashboard">
 
-<!-- ================= HEADER ================= -->
+<h2>Dashboard</h2>
 
-<header class="header">
+<div class="balance">
+ <div>
+  <div>Available Coins</div>
+  <small>10 coins required per successful report</small>
+ </div>
+ <div class="coin" id="coinBalance">-- 🪙</div>
+</div>
 
-    <div class="logo-area">
+<div class="copyCard" onclick="openSearch()">
+ <h3>📋 Reference Copy</h3>
+ <p>Reference Number এবং Date of Birth দিয়ে তথ্য খুঁজুন।</p>
+ <p><b>Charge:</b> 10 coins — শুধুমাত্র API সফল হলে।</p>
+</div>
 
-        <div class="logo-placeholder">
-            YOUR<br>LOGO
-        </div>
-
-    </div>
-
-
-    <div class="header-content">
-
-        <h1 class="header-title">
-            Bangladesh Information Portal
-        </h1>
-
-        <div class="header-subtitle">
-            Digital Information Registration System
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- ================= SEARCH ================= -->
-
-<section class="search-area">
-
-    <button class="menu-button">
-        Menu
-    </button>
-
-
-    <h2 class="search-heading">
-        Select Your Search Category
-    </h2>
-
-
-    <div class="search-option">
-
-        <label>
-
-            <input
-                type="radio"
-                name="searchType"
-                checked
-            >
-
-            Search by Reference No.
-
-        </label>
-
-    </div>
-
-
-    <div class="search-option">
-
-        <label>
-
-            <input
-                type="radio"
-                name="searchType"
-            >
-
-            Search by Form No.
-
-        </label>
-
-    </div>
-
-
-    <div class="search-form">
-
-        <span class="search-label">
-            Reference No*
-        </span>
-
-
-        <input
-            id="referenceInput"
-            class="search-input"
-            type="text"
-            placeholder="Enter Reference No"
-        >
-
-
-        <input
-            id="dobInput"
-            class="dob-input"
-            type="date"
-        >
-
-
-        <button
-            id="searchButton"
-            class="search-button"
-            onclick="searchAPI()"
-        >
-            Search
-        </button>
-
-    </div>
-
+</div>
 </section>
 
 
-<!-- ================= CONTENT ================= -->
+<!-- SEARCH -->
+<section id="searchPage" class="formPage">
 
-<main class="content">
+<button class="backBtn" onclick="showDashboard()">← Back</button>
+
+<h2 class="formTitle">Reference Copy</h2>
+
+<div class="formBox">
+
+<label>Reference Number</label>
+<input id="reference" type="text" placeholder="Enter reference number">
+
+<label>Date of Birth</label>
+<input id="dob" type="date">
+
+<button id="searchBtn" class="searchBtn" onclick="searchAPI()">
+ Search
+</button>
+
+<p style="font-size:12px;color:#777;text-align:center">
+API সফল হলে 10 coins কাটা হবে। API ব্যর্থ হলে কোনো coin কাটা হবে না।
+</p>
+
+</div>
+</section>
 
 
-<!-- LEFT -->
+<!-- REPORT -->
+<section id="reportPage" class="reportPage">
 
-<div class="left">
+<div id="report" class="report">
 
-    <img
-        id="photo"
-        class="photo"
-        alt="Demo Photo"
-    >
+<div class="reportHeader">
+ <div class="logo">YOUR<br>LOGO</div>
+ <div class="reportHeaderText">
+  <h1>Information Portal</h1>
+  <p>Digital Information System</p>
+ </div>
+</div>
 
+<div class="reportBody">
 
-    <div
-        id="personName"
-        class="person-name"
-    >
-        Not available
-    </div>
+<div class="reportGrid">
 
+<div class="leftCol">
 
-    <div class="qr-box">
+ <div class="photo">
+  <img id="rPhoto" alt="Demo Photo">
+ </div>
 
-        <div id="qrcode"></div>
+ <div class="name" id="rNameEn">
+  Not available
+ </div>
 
-    </div>
+ <div id="qrcode"></div>
 
 </div>
 
 
-
-<!-- RIGHT -->
-
-<div class="info">
-
-
-    <div class="section">
-        পরিচিতি তথ্য
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            পরিচিতি নম্বর
-        </div>
-
-        <div
-            class="value"
-            id="idNumber"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            রেফারেন্স নম্বর
-        </div>
-
-        <div
-            class="value"
-            id="reference"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            জন্মস্থান
-        </div>
-
-        <div
-            class="value"
-            id="birthPlace"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-
-    <div class="section">
-        ব্যক্তিগত তথ্য
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            নাম (বাংলা)
-        </div>
-
-        <div
-            class="value"
-            id="nameBn"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            নাম (ইংরেজি)
-        </div>
-
-        <div
-            class="value"
-            id="nameEn"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            জন্ম তারিখ
-        </div>
-
-        <div
-            class="value"
-            id="dob"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            পিতার নাম
-        </div>
-
-        <div
-            class="value"
-            id="father"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            মাতার নাম
-        </div>
-
-        <div
-            class="value"
-            id="mother"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-
-    <div class="section">
-        অন্যান্য তথ্য
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            রক্তের গ্রুপ
-        </div>
-
-        <div
-            class="value"
-            id="blood"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            পেশা
-        </div>
-
-        <div
-            class="value"
-            id="occupation"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-    <div class="row">
-
-        <div class="label">
-            অন্যান্য
-        </div>
-
-        <div
-            class="value"
-            id="other"
-        >
-            Not available
-        </div>
-
-    </div>
-
-
-
-    <div class="section">
-        বর্তমান ঠিকানা
-    </div>
-
-
-    <div
-        class="address"
-        id="presentAddress"
-    >
-        Not available
-    </div>
-
-
-
-    <div class="section">
-        স্থায়ী ঠিকানা
-    </div>
-
-
-    <div
-        class="address"
-        id="permanentAddress"
-    >
-        Not available
-    </div>
-
+<div>
+
+<div class="sectionTitle">Reference Information</div>
+
+<table class="infoTable">
+<tr>
+<td>Reference Number</td>
+<td id="rReference">Not available</td>
+</tr>
+<tr>
+<td>Date</td>
+<td id="rDob">Not available</td>
+</tr>
+<tr>
+<td>Record ID</td>
+<td id="rId">Not available</td>
+</tr>
+</table>
+
+
+<div class="sectionTitle">Personal Information</div>
+
+<table class="infoTable">
+<tr>
+<td>Name (Bangla)</td>
+<td id="rNameBn">Not available</td>
+</tr>
+<tr>
+<td>Name (English)</td>
+<td id="rNameEn2">Not available</td>
+</tr>
+<tr>
+<td>Date of Birth</td>
+<td id="rDob2">Not available</td>
+</tr>
+<tr>
+<td>Father Name</td>
+<td id="rFather">Not available</td>
+</tr>
+<tr>
+<td>Mother Name</td>
+<td id="rMother">Not available</td>
+</tr>
+</table>
+
+
+<div class="sectionTitle">Additional Information</div>
+
+<table class="infoTable">
+<tr>
+<td>Blood Group</td>
+<td id="rBlood">Not available</td>
+</tr>
+<tr>
+<td>Occupation</td>
+<td id="rOccupation">Not available</td>
+</tr>
+<tr>
+<td>Other</td>
+<td id="rOther">Not available</td>
+</tr>
+</table>
 
 </div>
-
-</main>
-
-
-
-<div class="warning">
-    DEMO REPORT — FOR DEVELOPMENT PURPOSES ONLY
 </div>
 
 
-<div class="footer">
-    This is a software generated demonstration report.
+<div class="address">
+ <div class="sectionTitle">Present Address</div>
+ <div class="addressText" id="rPresent">
+  Not available
+ </div>
+</div>
+
+<div class="address">
+ <div class="sectionTitle">Permanent Address</div>
+ <div class="addressText" id="rPermanent">
+  Not available
+ </div>
+</div>
+
+<div class="demoMark">
+ <b>DEMO REPORT — FOR DEVELOPMENT PURPOSES ONLY</b><br>
+ This report is generated from a development API.
+</div>
+
+</div>
 </div>
 
 
+<div class="bottomBar" id="reportButtons">
+<button class="back" onclick="showDashboard()">Back</button>
+<button class="download" onclick="downloadPDF()">
+ Download A4 PDF
+</button>
+</div>
 
-<!-- ================= DOWNLOAD ================= -->
-
-<div class="download-area">
-
-    <button
-        class="back-btn"
-        onclick="resetForm()"
-    >
-        Back
-    </button>
-
-
-    <button
-        class="download-btn"
-        onclick="downloadPDF()"
-    >
-        Download A4 PDF
-    </button>
+</section>
 
 </div>
 
-
-</div>
-
-
-<!-- TOAST -->
-
-<div
-    id="toast"
-    class="toast"
-></div>
-
+<div id="toast" class="toast"></div>
 
 
 <script>
 
-/* =====================================================
-   API CONFIG
-===================================================== */
+/* ==============================
+   FIREBASE CONFIG
+   ============================== */
 
-/*
-   এখন Demo Mode ON।
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-   পরে নিজের অনুমোদিত API বসিয়ে:
+firebase.initializeApp(firebaseConfig);
 
-   const DEMO_MODE = false;
-
-   করবে।
-*/
-
-const DEMO_MODE = true;
-
-const API_URL =
-    "https://YOUR-API-SERVER.com/api/search";
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 
-/* =====================================================
+/* ==============================
+   API
+   ============================== */
+
+const API_URL = "https://YOUR-API-SERVER.com/api/search";
+
+
+/* ==============================
+   SETTINGS
+   ============================== */
+
+const REPORT_COST = 10;
+
+
+/* ==============================
+   GLOBAL
+   ============================== */
+
+let currentUser = null;
+let currentData = null;
+
+
+/* ==============================
    TOAST
-===================================================== */
+   ============================== */
 
-let toastTimer;
+function toast(message){
 
-function showToast(
-    message,
-    type="info"
-){
+ const t = document.getElementById("toast");
 
-    const toast =
-        document.getElementById("toast");
+ t.textContent = message;
+ t.style.display = "block";
 
-    clearTimeout(toastTimer);
-
-    toast.textContent =
-        message;
-
-    toast.className =
-        "toast show " + type;
-
-    toastTimer =
-        setTimeout(
-            () => {
-                toast.className =
-                    "toast";
-            },
-            3500
-        );
+ setTimeout(()=>{
+   t.style.display = "none";
+ },3000);
 }
 
 
-/* =====================================================
-   SAFE VALUE
-===================================================== */
+/* ==============================
+   AUTH
+   ============================== */
 
-function safe(value){
+auth.onAuthStateChanged(async user=>{
 
-    if(
-        value === undefined ||
-        value === null ||
-        String(value).trim() === ""
-    ){
-        return "Not available";
-    }
+ currentUser = user;
 
-    return String(value);
+ if(!user){
+   document.getElementById("coinBalance").textContent = "Login required";
+   return;
+ }
+
+ await loadCoins();
+
+});
+
+
+/* ==============================
+   LOAD COINS
+   ============================== */
+
+async function loadCoins(){
+
+ if(!currentUser)return;
+
+ const ref = db.collection("users").doc(currentUser.uid);
+
+ const snap = await ref.get();
+
+ if(!snap.exists){
+
+   await ref.set({
+     coins:100,
+     createdAt:firebase.firestore.FieldValue.serverTimestamp()
+   });
+
+   document.getElementById("coinBalance").textContent="100 🪙";
+
+ }else{
+
+   const data=snap.data();
+
+   document.getElementById("coinBalance").textContent =
+     (data.coins || 0) + " 🪙";
+
+ }
+
 }
 
 
-/* =====================================================
-   DEMO PHOTO
-===================================================== */
+/* ==============================
+   PAGE NAVIGATION
+   ============================== */
 
-function demoPhoto(){
+function openSearch(){
 
-    return "data:image/svg+xml;charset=UTF-8," +
+ document.getElementById("dashboard").style.display="none";
+ document.getElementById("searchPage").style.display="block";
+ document.getElementById("reportPage").style.display="none";
 
-    encodeURIComponent(`
+}
 
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="300"
-            height="360"
-        >
+function showDashboard(){
 
-            <rect
-                width="300"
-                height="360"
-                fill="#eeeeee"
-            />
+ document.getElementById("dashboard").style.display="block";
+ document.getElementById("searchPage").style.display="none";
+ document.getElementById("reportPage").style.display="none";
 
-            <circle
-                cx="150"
-                cy="125"
-                r="60"
-                fill="#b5b5b5"
-            />
-
-            <rect
-                x="75"
-                y="195"
-                width="150"
-                height="120"
-                rx="60"
-                fill="#b5b5b5"
-            />
-
-            <text
-                x="150"
-                y="345"
-                text-anchor="middle"
-                font-family="Arial"
-                font-size="17"
-                fill="#555"
-            >
-                DEMO PHOTO
-            </text>
-
-        </svg>
-
-    `);
 }
 
 
-/* =====================================================
-   DEMO DATA
-===================================================== */
-
-function demoData(
-    reference,
-    dob
-){
-
-    return {
-
-        id:
-            "DEMO-" + reference,
-
-        reference:
-            reference,
-
-        nameBn:
-            "উদাহরণ ব্যবহারকারী",
-
-        nameEn:
-            "DEMO USER",
-
-        dob:
-            dob,
-
-        father:
-            "উদাহরণ পিতা",
-
-        mother:
-            "উদাহরণ মাতা",
-
-        birthPlace:
-            "ঢাকা",
-
-        blood:
-            "O+",
-
-        occupation:
-            "Student",
-
-        other:
-            "Demo information",
-
-        presentAddress:
-            "Demo Present Address, Bangladesh",
-
-        permanentAddress:
-            "Demo Permanent Address, Bangladesh",
-
-        photo:
-            demoPhoto()
-
-    };
-}
-
-
-/* =====================================================
-   SEARCH API
-===================================================== */
+/* ==============================
+   SEARCH
+   ============================== */
 
 async function searchAPI(){
 
-    const reference =
-        document
-        .getElementById("referenceInput")
-        .value
-        .trim();
+ const reference =
+   document.getElementById("reference").value.trim();
+
+ const dob =
+   document.getElementById("dob").value;
+
+ if(!reference || !dob){
+
+   toast("Reference Number এবং DOB দিন");
+   return;
+
+ }
+
+ if(!currentUser){
+
+   toast("Please login first");
+   return;
+
+ }
+
+ const button=document.getElementById("searchBtn");
+
+ button.disabled=true;
+ button.textContent="Searching...";
 
 
-    const dob =
-        document
-        .getElementById("dobInput")
-        .value;
+ try{
+
+   /*
+      IMPORTANT:
+
+      Coin deduction এখানে করা হচ্ছে না।
+
+      প্রথমে API SUCCESS নিশ্চিত করতে হবে।
+   */
+
+   const url =
+     API_URL +
+     "?reference=" +
+     encodeURIComponent(reference) +
+     "&dob=" +
+     encodeURIComponent(dob);
+
+   const response = await fetch(url,{
+     method:"GET",
+     headers:{
+       "Accept":"application/json"
+     }
+   });
+
+   if(!response.ok){
+
+     throw new Error("API_SERVER_ERROR");
+
+   }
+
+   const result=await response.json();
+
+   if(!result || result.success !== true || !result.data){
+
+     throw new Error("API_FAILED");
+
+   }
 
 
-    if(!reference){
+   /*
+      API SUCCESS হয়েছে।
+      এখন backend transaction ব্যবহার করে
+      10 coins কাটতে হবে।
+   */
 
-        showToast(
-            "Reference Number দিন",
-            "error"
-        );
+   const transactionResult =
+     await deductCoinsSecurely(REPORT_COST);
 
-        return;
-    }
+   if(!transactionResult.success){
 
+     throw new Error(transactionResult.message || "COIN_ERROR");
 
-    if(!dob){
-
-        showToast(
-            "Date of Birth দিন",
-            "error"
-        );
-
-        return;
-    }
+   }
 
 
-    const button =
-        document.getElementById(
-            "searchButton"
-        );
+   /*
+      সব সফল।
+      এখন report load হবে।
+   */
+
+   currentData=result.data;
+
+   loadReport(currentData);
+
+   await loadCoins();
+
+   document.getElementById("searchPage").style.display="none";
+   document.getElementById("reportPage").style.display="block";
+
+   toast("API success — 10 coins deducted");
 
 
-    button.disabled = true;
+ }catch(error){
 
-    button.textContent =
-        "Loading...";
+   console.error(error);
 
+   /*
+      API failure হলে এখানে কোনো coin deduction
+      করা হয়নি।
+   */
 
-    try{
+   if(error.message==="COIN_ERROR"){
 
-        /* ================================
-           DEMO
-        ================================= */
+     toast("Report তৈরি করা যায়নি");
 
-        if(DEMO_MODE){
+   }else{
 
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        600
-                    )
-            );
+     toast("API server off");
 
+   }
 
-            const data =
-                demoData(
-                    reference,
-                    dob
-                );
+ }finally{
 
+   button.disabled=false;
+   button.textContent="Search";
 
-            loadData(data);
+ }
 
-
-            showToast(
-                "Demo data loaded",
-                "success"
-            );
-
-            return;
-        }
-
-
-        /* ================================
-           REAL API
-        ================================= */
-
-        const url =
-            API_URL +
-            "?reference=" +
-            encodeURIComponent(reference) +
-            "&dob=" +
-            encodeURIComponent(dob);
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    method:"GET",
-
-                    headers:{
-                        "Accept":
-                            "application/json"
-                    },
-
-                    cache:"no-store"
-                }
-            );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "API_SERVER_OFF"
-            );
-        }
-
-
-        const result =
-            await response.json();
-
-
-        if(
-            result.success === false
-        ){
-
-            showToast(
-                result.message ||
-                "Data not found",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const data =
-            result.data ||
-            result.result ||
-            result;
-
-
-        if(
-            !data ||
-            typeof data !== "object"
-        ){
-
-            showToast(
-                "Data পাওয়া যায়নি",
-                "error"
-            );
-
-            return;
-        }
-
-
-        loadData(data);
-
-
-        showToast(
-            "Data loaded successfully",
-            "success"
-        );
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        showToast(
-            "API server off",
-            "error"
-        );
-
-    }
-    finally{
-
-        button.disabled =
-            false;
-
-        button.textContent =
-            "Search";
-    }
 }
 
 
-/* =====================================================
-   LOAD DATA INTO DESIGN
-===================================================== */
+/* ==============================
+   SECURE COIN DEDUCTION
+   ============================== */
 
-function loadData(data){
+/*
+   Production version-এ এই function-এর বদলে
+   Firebase Cloud Function / নিজের backend endpoint
+   ব্যবহার করবে।
 
-    setText(
-        "idNumber",
-        data.id ||
-        data.idNumber
-    );
+   Frontend থেকে সরাসরি coins কমানো নিরাপদ নয়।
+*/
 
+async function deductCoinsSecurely(amount){
 
-    setText(
-        "reference",
-        data.reference
-    );
+ try{
 
+   /*
+      Example backend:
 
-    setText(
-        "birthPlace",
-        data.birthPlace ||
-        data.birth_place
-    );
+      POST /api/deduct-coins
 
+      {
+        amount:10
+      }
 
-    setText(
-        "nameBn",
-        data.nameBn ||
-        data.name_bn
-    );
+      Backend:
+      1. Firebase Auth token verify
+      2. User balance check
+      3. Firestore transaction
+      4. balance - 10
+      5. success return
 
+   */
 
-    setText(
-        "nameEn",
-        data.nameEn ||
-        data.name_en ||
-        data.name
-    );
+   const token =
+     await currentUser.getIdToken();
 
+   const response=await fetch(
+     "https://YOUR-API-SERVER.com/api/deduct-coins",
+     {
+       method:"POST",
+       headers:{
+         "Content-Type":"application/json",
+         "Authorization":"Bearer "+token
+       },
+       body:JSON.stringify({
+         amount:amount
+       })
+     }
+   );
 
-    setText(
-        "personName",
-        data.nameEn ||
-        data.name_en ||
-        data.name
-    );
+   if(!response.ok){
 
+     return {
+       success:false,
+       message:"Coin server error"
+     };
 
-    setText(
-        "dob",
-        data.dob ||
-        data.dateOfBirth
-    );
+   }
 
+   return await response.json();
 
-    setText(
-        "father",
-        data.father ||
-        data.fatherName
-    );
+ }catch(e){
 
+   console.error(e);
 
-    setText(
-        "mother",
-        data.mother ||
-        data.motherName
-    );
+   return {
+     success:false,
+     message:"Coin server unavailable"
+   };
 
+ }
 
-    setText(
-        "blood",
-        data.blood ||
-        data.bloodGroup
-    );
-
-
-    setText(
-        "occupation",
-        data.occupation ||
-        data.profession
-    );
-
-
-    setText(
-        "other",
-        data.other
-    );
-
-
-    setText(
-        "presentAddress",
-        data.presentAddress ||
-        data.present_address ||
-        data.address
-    );
-
-
-    setText(
-        "permanentAddress",
-        data.permanentAddress ||
-        data.permanent_address
-    );
-
-
-    /* PHOTO */
-
-    const photo =
-        data.photo ||
-        data.image ||
-        data.photoUrl ||
-        data.photo_url;
-
-
-    document.getElementById(
-        "photo"
-    ).src =
-        photo || demoPhoto();
-
-
-    /* QR */
-
-    const qrText =
-        data.qr ||
-        data.qrCode ||
-        data.qr_code ||
-        data.reference ||
-        data.id ||
-        "DEMO";
-
-
-    createQR(qrText);
 }
 
 
-/* =====================================================
-   TEXT
-===================================================== */
+/* ==============================
+   REPORT
+   ============================== */
 
-function setText(
-    id,
-    value
-){
+function value(v){
 
-    document.getElementById(
-        id
-    ).textContent =
-        safe(value);
+ if(
+   v===undefined ||
+   v===null ||
+   String(v).trim()===""
+ ){
+
+   return "Not available";
+
+ }
+
+ return String(v);
+
 }
 
 
-/* =====================================================
-   QR
-===================================================== */
+function loadReport(data){
 
-function createQR(text){
+ document.getElementById("rReference").textContent =
+   value(data.reference);
 
-    const box =
-        document.getElementById(
-            "qrcode"
-        );
+ document.getElementById("rDob").textContent =
+   value(data.dob);
+
+ document.getElementById("rId").textContent =
+   value(data.id);
+
+ document.getElementById("rNameBn").textContent =
+   value(data.nameBn);
+
+ document.getElementById("rNameEn").textContent =
+   value(data.nameEn);
+
+ document.getElementById("rNameEn2").textContent =
+   value(data.nameEn);
+
+ document.getElementById("rDob2").textContent =
+   value(data.dob);
+
+ document.getElementById("rFather").textContent =
+   value(data.father);
+
+ document.getElementById("rMother").textContent =
+   value(data.mother);
+
+ document.getElementById("rBlood").textContent =
+   value(data.blood);
+
+ document.getElementById("rOccupation").textContent =
+   value(data.occupation);
+
+ document.getElementById("rOther").textContent =
+   value(data.other);
+
+ document.getElementById("rPresent").textContent =
+   value(data.presentAddress);
+
+ document.getElementById("rPermanent").textContent =
+   value(data.permanentAddress);
 
 
-    box.innerHTML = "";
+ /* Photo */
+
+ const photo=document.getElementById("rPhoto");
+
+ photo.src =
+   data.photo ||
+   createDemoPhoto();
 
 
-    new QRCode(
-        box,
-        {
-            text:String(text),
+ /* QR */
 
-            width:116,
+ const qr=document.getElementById("qrcode");
 
-            height:116,
+ qr.innerHTML="";
 
-            correctLevel:
-                QRCode.CorrectLevel.M
-        }
-    );
+ new QRCode(qr,{
+   text:
+     data.qr ||
+     data.qrCode ||
+     String(data.reference || data.id || ""),
+   width:92,
+   height:92,
+   correctLevel:QRCode.CorrectLevel.M
+ });
+
 }
 
 
-/* =====================================================
-   RESET
-===================================================== */
+/* ==============================
+   DEMO PHOTO
+   ============================== */
 
-function resetForm(){
+function createDemoPhoto(){
 
-    document
-    .getElementById(
-        "referenceInput"
-    )
-    .value = "";
+ const svg=`
+ <svg xmlns="http://www.w3.org/2000/svg"
+      width="300" height="380">
+   <rect width="100%" height="100%" fill="#eeeeee"/>
+   <circle cx="150" cy="120" r="60" fill="#b5b5b5"/>
+   <rect x="80" y="195" width="140"
+         height="130" rx="60" fill="#b5b5b5"/>
+   <text x="150" y="355"
+         text-anchor="middle"
+         font-size="18"
+         fill="#555">
+     DEMO PHOTO
+   </text>
+ </svg>
+ `;
 
+ return "data:image/svg+xml;charset=UTF-8,"+
+   encodeURIComponent(svg);
 
-    document
-    .getElementById(
-        "dobInput"
-    )
-    .value = "";
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
 }
 
 
-/* =====================================================
+/* ==============================
    PDF
-===================================================== */
+   ============================== */
 
 async function downloadPDF(){
 
-    const report =
-        document.getElementById(
-            "report"
-        );
+ const report=document.getElementById("report");
+ const buttons=document.getElementById("reportButtons");
 
+ buttons.style.display="none";
 
-    const buttons =
-        document.querySelector(
-            ".download-area"
-        );
+ try{
 
+   await waitImages(report);
 
-    const originalHeight =
-        report.style.height;
+   const canvas=await html2canvas(report,{
+     scale:2,
+     useCORS:true,
+     allowTaint:false,
+     backgroundColor:"#ffffff"
+   });
 
+   const imgData=canvas.toDataURL("image/jpeg",0.95);
 
-    try{
+   const {jsPDF}=window.jspdf;
 
-        buttons.style.display =
-            "none";
+   const pdf=new jsPDF({
+     orientation:"portrait",
+     unit:"mm",
+     format:"a4"
+   });
 
+   pdf.addImage(
+     imgData,
+     "JPEG",
+     0,
+     0,
+     210,
+     297
+   );
 
-        showToast(
-            "PDF তৈরি হচ্ছে...",
-            "info"
-        );
+   const ref=
+     currentData?.reference || "report";
 
+   pdf.save(
+     "demo-report-"+ref+".pdf"
+   );
 
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    500
-                )
-        );
+ }catch(e){
 
+   console.error(e);
 
-        const canvas =
-            await html2canvas(
-                report,
-                {
-                    scale:2,
+   toast("PDF তৈরি করা যায়নি");
 
-                    useCORS:true,
+ }finally{
 
-                    allowTaint:false,
+   buttons.style.display="block";
 
-                    backgroundColor:
-                        "#ffffff",
+ }
 
-                    logging:false
-                }
-            );
-
-
-        const image =
-            canvas.toDataURL(
-                "image/jpeg",
-                .95
-            );
-
-
-        const {
-            jsPDF
-        } =
-            window.jspdf;
-
-
-        const pdf =
-            new jsPDF({
-                orientation:"portrait",
-
-                unit:"mm",
-
-                format:"a4",
-
-                compress:true
-            });
-
-
-        const pageWidth = 210;
-        const pageHeight = 297;
-
-
-        const ratio =
-            canvas.width /
-            canvas.height;
-
-
-        let width =
-            pageWidth;
-
-
-        let height =
-            width / ratio;
-
-
-        if(height > pageHeight){
-
-            height =
-                pageHeight;
-
-            width =
-                height * ratio;
-        }
-
-
-        const x =
-            (pageWidth-width)/2;
-
-
-        const y =
-            (pageHeight-height)/2;
-
-
-        pdf.addImage(
-            image,
-            "JPEG",
-            x,
-            y,
-            width,
-            height,
-            undefined,
-            "FAST"
-        );
-
-
-        pdf.save(
-            "demo-information-report-A4.pdf"
-        );
-
-
-        showToast(
-            "PDF download হয়েছে",
-            "success"
-        );
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        showToast(
-            "PDF তৈরি করা যায়নি",
-            "error"
-        );
-
-    }
-    finally{
-
-        report.style.height =
-            originalHeight;
-
-        buttons.style.display =
-            "flex";
-    }
 }
 
 
-/* =====================================================
-   INITIAL DEMO
-===================================================== */
+/* ==============================
+   WAIT FOR IMAGES
+   ============================== */
 
-document.getElementById(
-    "photo"
-).src =
-    demoPhoto();
+function waitImages(container){
 
+ const images=[
+   ...container.querySelectorAll("img")
+ ];
 
-createQR(
-    "DEMO-REPORT"
-);
+ return Promise.all(
+   images.map(img=>{
+
+     if(img.complete)return Promise.resolve();
+
+     return new Promise(resolve=>{
+       img.onload=resolve;
+       img.onerror=resolve;
+     });
+
+   })
+ );
+
+}
 
 </script>
 
