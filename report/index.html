@@ -3,485 +3,452 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo Information Report</title>
+<title>Digital Information Report - Demo</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:#e5e5e5;
+  font-family:Arial,"Noto Sans Bengali",sans-serif;
+  color:#222
 }
-
-body {
-  margin: 0;
-  padding: 15px;
-  background: #e7e7e7;
-  color: #333;
-  font-family: Arial, "Noto Sans Bengali", sans-serif;
-  font-size: 12px;
+.a4-page{
+  width:210mm;height:297mm;margin:20px auto;
+  background:#fff;position:relative;overflow:hidden;
+  border:1px solid #bbb;
+  box-shadow:0 0 12px rgba(0,0,0,.18)
 }
-
-.page {
-  width: 100%;
-  max-width: 850px;
-  min-height: 1120px;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: 0 1px 8px #bbb;
-  position: relative;
+.header{
+  width:100%;height:40mm;position:relative;overflow:hidden;
+  background:linear-gradient(to bottom,#b5c2b6 0%,#788f7b 42%,#24462d 100%)
 }
-
-.header {
-  min-height: 150px;
-  background: linear-gradient(#b9c8bb, #214b32);
-  display: flex;
-  align-items: center;
-  padding: 15px 25px;
-  gap: 20px;
-  color: white;
+.header::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 38%,rgba(0,0,0,.12));
+  pointer-events:none
 }
-
-.logo-circle {
-  width: 130px;
-  height: 130px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #f6f8f4;
-  border: 1px solid #d7e0d5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.logo-area{
+  position:absolute;left:0;top:0;width:42mm;height:40mm;
+  background:#e9eee9;border-radius:0 21mm 21mm 0;
+  display:flex;justify-content:center;align-items:center;z-index:2
 }
-
-.logo-inner {
-  width: 78px;
-  height: 78px;
-  border: 1px solid #315e43;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #315e43;
-  font-size: 9px;
+.logo-placeholder{
+  width:23mm;height:23mm;border-radius:50%;background:#fff;
+  border:2px solid #28663b;display:flex;justify-content:center;
+  align-items:center;text-align:center;color:#28663b;font-size:9px;font-weight:bold
 }
-
-.heading {
-  flex: 1;
-  text-align: center;
+.header-content{
+  position:absolute;left:42mm;right:0;top:0;bottom:0;
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:center;z-index:2
 }
-
-.heading h1 {
-  font-size: 22px;
-  font-weight: 500;
-  margin: 0 0 8px;
+.header-title{
+  margin:0;color:#fff;font-size:24px;font-weight:bold;text-align:center;
+  text-shadow:1px 2px 3px rgba(0,0,0,.4)
 }
-
-.heading p {
-  color: #fff36a;
-  font-size: 14px;
-  margin: 0;
+.header-subtitle{
+  margin-top:5px;color:#f0df35;font-size:15px;font-weight:bold;
+  text-align:center;text-shadow:1px 2px 2px rgba(0,0,0,.3)
 }
-
-.search-area {
-  padding: 15px 20px 20px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
+.search-area{
+  width:100%;height:38mm;position:relative;background:#fff;
+  text-align:center;padding-top:3mm
 }
-
-.search-title {
-  color: #79516c;
-  font-size: 14px;
-  margin-bottom: 8px;
+.menu-button{
+  position:absolute;right:4mm;top:3mm;background:#147bd3;color:#fff;
+  border:0;padding:5px 13px;font-size:9px
 }
-
-.category {
-  margin: 5px;
-  color: #777;
+.search-heading{margin:0 0 1.5mm;color:#9d416e;font-size:14px;font-weight:bold}
+.search-option{color:#438d7c;font-size:10px;line-height:16px}
+.search-option input{vertical-align:middle}
+.search-form{
+  margin-top:3mm;display:flex;justify-content:center;align-items:center;gap:5px
 }
-
-.search-form {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
+.search-label{color:#a53c4b;font-size:10px;font-weight:bold}
+.search-input{
+  width:43mm;height:7mm;border:1px solid #ddd;padding:3px 6px;
+  font-size:10px;outline:none
 }
-
-.search-form label {
-  color: #754b5d;
+.search-button{
+  height:7mm;padding:0 12px;background:#20a54a;color:#fff;
+  border:0;cursor:pointer;font-size:9px
 }
-
-.search-form input {
-  width: 145px;
-  height: 28px;
-  border: 1px solid #ddd;
-  padding: 5px;
-  font-size: 12px;
-  background: white;
+.content{
+  display:grid;grid-template-columns:44mm 1fr;gap:6mm;
+  padding:5mm 13mm 3mm 13mm
 }
-
-.search-form button {
-  background: #229b50;
-  color: white;
-  border: 0;
-  padding: 7px 14px;
-  font-size: 11px;
+.left{text-align:center;padding-top:1mm}
+.photo{
+  width:35mm;height:43mm;object-fit:cover;border:1px solid #ccc;
+  border-radius:2mm;display:block;margin:auto
 }
-
-.menu {
-  position: absolute;
-  top: 166px;
-  right: 16px;
-  background: #1683d7;
-  color: white;
-  border: 0;
-  padding: 5px 15px;
-  font-size: 10px;
+.person-name{margin-top:3mm;margin-bottom:7mm;font-size:11px;font-weight:bold;word-break:break-word}
+.qr{width:31mm;height:31mm;object-fit:contain;display:block;margin:auto}
+.info{width:100%;min-width:0}
+.section{
+  width:100%;min-height:6.5mm;padding:1.2mm 1.8mm;
+  background:#b9e2e5;border-bottom:1px solid #d2d2d2;
+  font-size:12px;font-weight:bold
 }
-
-.report-content {
-  display: grid;
-  grid-template-columns: 155px 1fr;
-  gap: 15px;
-  padding: 30px 35px 100px;
+.row{
+  width:100%;min-height:6.7mm;display:grid;
+  grid-template-columns:44mm 1fr;border-bottom:1px solid #ededed;font-size:9.5px
 }
-
-.left-column {
-  text-align: center;
+.label,.value{padding:1.3mm 1mm;word-break:break-word;overflow-wrap:anywhere}
+.address{
+  width:100%;min-height:16mm;padding:1.8mm;border-bottom:1px solid #eee;
+  font-size:9px;line-height:1.45;overflow-wrap:anywhere
 }
-
-.photo {
-  width: 125px;
-  height: 160px;
-  margin: 5px auto 10px;
-  border: 1px solid #d7d7d7;
-  background: #f1f1f1;
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #666;
+.warning{text-align:center;color:#d33;font-size:7px;margin:2mm 8mm 1mm}
+.footer{text-align:center;font-family:Georgia,serif;font-size:8px;padding-bottom:2mm}
+.download-area{
+  position:absolute;bottom:0;left:0;right:0;height:14mm;background:#f4f4f4;
+  border-top:1px solid #ddd;display:flex;justify-content:center;align-items:center
 }
-
-.head-shape {
-  width: 45px;
-  height: 45px;
-  background: #b9b9b9;
-  border-radius: 50%;
-  margin-bottom: 5px;
+.download-btn{
+  background:#147bd3;color:white;border:0;padding:7px 20px;
+  border-radius:4px;font-size:12px;cursor:pointer
 }
+.download-btn:disabled{opacity:.6;cursor:wait}
 
-.body-shape {
-  width: 62px;
-  height: 45px;
-  background: #b9b9b9;
-  border-radius: 28px 28px 16px 16px;
+@page{size:A4 portrait;margin:0}
+@media print{
+  html,body{width:210mm;height:297mm;margin:0;padding:0;background:#fff}
+  .a4-page{width:210mm;height:297mm;margin:0;border:0;box-shadow:none}
+  .download-area,.menu-button{display:none}
 }
-
-.photo small {
-  font-size: 8px;
-  margin-top: 8px;
-}
-
-.person-name {
-  font-size: 12px;
-  margin: 12px 0 24px;
-}
-
-.qr {
-  width: 112px;
-  height: 112px;
-  margin: 0 auto;
-  display: block;
-}
-
-.details {
-  min-width: 0;
-}
-
-.section-title {
-  background: #b8e1e2;
-  padding: 7px 9px;
-  font-weight: bold;
-  font-size: 13px;
-  margin: 0 0 4px;
-}
-
-.info-row {
-  display: grid;
-  grid-template-columns: 42% 58%;
-  min-height: 25px;
-  border-bottom: 1px solid #ededed;
-  align-items: center;
-  padding: 4px 5px;
-}
-
-.info-row .value {
-  overflow-wrap: anywhere;
-}
-
-.address {
-  padding: 8px 5px 28px;
-  min-height: 65px;
-  line-height: 1.8;
-}
-
-.watermark {
-  border-top: 1px solid #eee;
-  margin-top: 5px;
-  padding: 20px 5px;
-  text-align: center;
-  font-size: 8px;
-  color: #a66b6b;
-}
-
-.watermark small {
-  display: block;
-  color: #777;
-  margin-top: 5px;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  min-height: 55px;
-  background: #f5f5f5;
-  border-top: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.footer button {
-  padding: 9px 16px;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.back {
-  background: #555;
-}
-
-.download {
-  background: #1685d5;
-}
-
-@media (max-width: 520px) {
-  body {
-    padding: 8px;
-  }
-
-  .page {
-    min-height: 950px;
-  }
-
-  .header {
-    min-height: 110px;
-    padding: 10px;
-    gap: 8px;
-  }
-
-  .logo-circle {
-    width: 78px;
-    height: 78px;
-  }
-
-  .logo-inner {
-    width: 52px;
-    height: 52px;
-    font-size: 7px;
-  }
-
-  .heading h1 {
-    font-size: 16px;
-  }
-
-  .heading p {
-    font-size: 11px;
-  }
-
-  .menu {
-    top: 124px;
-    right: 10px;
-  }
-
-  .search-area {
-    padding: 12px 8px 18px;
-  }
-
-  .search-form input {
-    width: 105px;
-  }
-
-  .report-content {
-    grid-template-columns: 105px minmax(0, 1fr);
-    gap: 8px;
-    padding: 28px 10px 85px;
-  }
-
-  .photo {
-    width: 95px;
-    height: 130px;
-  }
-
-  .qr {
-    width: 85px;
-    height: 85px;
-  }
-
-  .info-row {
-    grid-template-columns: 42% 58%;
-    font-size: 10px;
-    padding: 5px 3px;
-  }
-
-  .section-title {
-    font-size: 11px;
-    padding: 6px;
-  }
-
-  .address {
-    font-size: 10px;
-  }
-}
-
-@media print {
-  body {
-    padding: 0;
-    background: white;
-  }
-
-  .page {
-    max-width: none;
-    box-shadow: none;
-  }
-
-  .footer {
-    display: none;
-  }
+@media(max-width:700px){
+  body{background:#ddd;padding:0}
+  .a4-page{width:100%;height:auto;min-height:297mm;margin:0;border:0;box-shadow:none}
+  .header{height:110px}
+  .logo-area{width:105px;height:110px;border-radius:0 55px 55px 0}
+  .logo-placeholder{width:58px;height:58px;font-size:8px}
+  .header-content{left:100px}
+  .header-title{font-size:18px;padding:0 5px}
+  .header-subtitle{font-size:10px;padding:0 5px}
+  .search-area{height:165px}
+  .search-form{flex-wrap:wrap}
+  .content{grid-template-columns:1fr;padding:20px}
+  .left{margin-bottom:15px}
+  .row{grid-template-columns:42% 58%}
+  .download-area{position:relative;height:auto;padding:12px}
 }
 </style>
 </head>
 
 <body>
+<div class="a4-page" id="report">
 
-<div class="page">
+<header class="header">
+  <div class="logo-area">
+    <div class="logo-placeholder">YOUR<br>LOGO</div>
+  </div>
+  <div class="header-content">
+    <h1 class="header-title">Bangladesh Information Portal</h1>
+    <div class="header-subtitle">Digital Information Registration System</div>
+  </div>
+</header>
 
-  <header class="header">
-    <div class="logo-circle">
-      <div class="logo-inner">YOUR<br>LOGO</div>
-    </div>
-
-    <div class="heading">
-      <h1>Bangladesh Information Portal</h1>
-      <p>Digital Information Registration System</p>
-    </div>
-  </header>
-
-  <button class="menu" type="button">Menu</button>
-
-  <section class="search-area">
-    <div class="search-title">Select Your Search Category</div>
-
-    <div class="category">
-      <label><input type="radio" name="category" checked>
-      Search by Reference No.</label>
-    </div>
-
-    <div class="category">
-      <label><input type="radio" name="category">
+<section class="search-area">
+  <button class="menu-button" type="button">Menu</button>
+  <h2 class="search-heading">Select Your Search Category</h2>
+  <div class="search-option">
+    <label><input type="radio" name="searchType" value="id" checked>
+      Search by ID / Reference No.</label>
+  </div>
+  <div class="search-option">
+    <label><input type="radio" name="searchType" value="form">
       Search by Form No.</label>
-    </div>
+  </div>
+  <div class="search-form">
+    <span class="search-label">ID or Reference No*</span>
+    <input type="text" id="searchInput" class="search-input" placeholder="Enter ID">
+    <button class="search-button" type="button" onclick="searchData()">Search</button>
+  </div>
+</section>
 
-    <div class="search-form">
-      <label for="reference">Reference No*</label>
-      <input id="reference" type="text" placeholder="Enter Reference No.">
-      <input type="date" aria-label="Date">
-      <button type="button">Search</button>
-    </div>
-  </section>
+<main class="content">
+  <div class="left">
+    <img id="photo" class="photo"
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='240'%3E%3Crect width='100%25' height='100%25' fill='%23eeeeee'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-size='18' fill='%23777777'%3EDEMO PHOTO%3C/text%3E%3C/svg%3E"
+      alt="Demo photo">
+    <div id="personName" class="person-name">DEMO USER</div>
 
-  <main class="report-content">
+    <!-- Decorative demo QR only; not a real identity code -->
+    <svg class="qr" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Demo QR graphic">
+      <rect width="100" height="100" fill="#fff"/>
+      <g fill="#111">
+        <path d="M3 3h28v28H3z M8 8v18h18V8z M12 12h10v10H12z"/>
+        <path d="M69 3h28v28H69z M74 8v18h18V8z M78 12h10v10H78z"/>
+        <path d="M3 69h28v28H3z M8 74v18h18V74z M12 78h10v10H12z"/>
+        <path d="M38 3h6v6h-6z M50 3h6v12h-6z M38 15h12v6H38z
+        M44 21h6v12h-6z M56 21h6v6h-6z M38 38h6v6h-6z
+        M50 38h6v6h-6z M62 38h6v12h-6z M74 38h6v6h-6z
+        M86 38h11v6H86z M38 50h12v6H38z M56 50h6v6h-6z
+        M74 50h6v12h-6z M86 50h6v12h-6z M38 62h6v6h-6z
+        M50 62h12v6H50z M62 74h6v6h-6z M74 68h6v6h-6z
+        M86 68h11v6H86z M38 80h6v6h-6z M50 80h6v6h-6z
+        M56 86h12v6H56z M74 86h6v11h-6z M86 80h11v6H86z
+        M38 92h12v5H38z"/>
+      </g>
+    </svg>
+  </div>
 
-    <aside class="left-column">
-      <div class="photo">
-        <div class="head-shape"></div>
-        <div class="body-shape"></div>
-        <small>DEMO PHOTO</small>
-      </div>
+  <div class="info">
+    <div class="section">পরিচিতি তথ্য</div>
+    <div class="row"><div class="label">পরিচিতি নম্বর</div><div class="value" id="idNumber">DEMO-000001</div></div>
+    <div class="row"><div class="label">রেফারেন্স নম্বর</div><div class="value" id="reference">REF-000001</div></div>
+    <div class="row"><div class="label">জন্মস্থান</div><div class="value" id="birthPlace">Demo District</div></div>
 
-      <div class="person-name">DEMO USER</div>
+    <div class="section">ব্যক্তিগত তথ্য</div>
+    <div class="row"><div class="label">নাম (বাংলা)</div><div class="value" id="nameBn">ডেমো ব্যবহারকারী</div></div>
+    <div class="row"><div class="label">নাম (ইংরেজি)</div><div class="value" id="nameEn">DEMO USER</div></div>
+    <div class="row"><div class="label">জন্ম তারিখ</div><div class="value" id="dob">2000-01-01</div></div>
+    <div class="row"><div class="label">পিতার নাম</div><div class="value" id="father">Demo Father</div></div>
+    <div class="row"><div class="label">মাতার নাম</div><div class="value" id="mother">Demo Mother</div></div>
 
-      <!-- Decorative QR-style graphic; not a real identification code -->
-      <svg class="qr" viewBox="0 0 100 100"
-           xmlns="http://www.w3.org/2000/svg"
-           aria-label="Decorative demo QR graphic">
-        <rect width="100" height="100" fill="white"/>
-        <g fill="black">
-          <path d="M3 3h28v28H3z M8 8v18h18V8z M12 12h10v10H12z"/>
-          <path d="M69 3h28v28H69z M74 8v18h18V8z M78 12h10v10H78z"/>
-          <path d="M3 69h28v28H3z M8 74v18h18V74z M12 78h10v10H12z"/>
-          <path d="M38 3h6v6h-6z M50 3h6v12h-6z M38 15h12v6H38z
-                   M44 21h6v12h-6z M56 21h6v6h-6z
-                   M38 38h6v6h-6z M50 38h6v6h-6z
-                   M62 38h6v12h-6z M74 38h6v6h-6z
-                   M86 38h11v6H86z M38 50h12v6H38z
-                   M56 50h6v6h-6z M74 50h6v12h-6z
-                   M86 50h6v12h-6z M38 62h6v6h-6z
-                   M50 62h12v6H50z M62 74h6v6h-6z
-                   M74 68h6v6h-6z M86 68h11v6H86z
-                   M38 80h6v6h-6z M50 80h6v6h-6z
-                   M56 86h12v6H56z M74 86h6v11h-6z
-                   M86 80h11v6H86z M38 92h12v5H38z"/>
-        </g>
-      </svg>
-    </aside>
+    <div class="section">অন্যান্য তথ্য</div>
+    <div class="row"><div class="label">রক্তের গ্রুপ</div><div class="value" id="blood">O+</div></div>
+    <div class="row"><div class="label">স্বামী/স্ত্রীর নাম</div><div class="value" id="spouse">-</div></div>
+    <div class="row"><div class="label">পেশা</div><div class="value" id="occupation">Student</div></div>
+    <div class="row"><div class="label">অন্যান্য</div><div class="value" id="other">Demo Information</div></div>
 
-    <section class="details">
+    <div class="section">বর্তমান ঠিকানা</div>
+    <div class="address" id="presentAddress">Demo Present Address, Bangladesh.</div>
 
-      <div class="section-title">পরিচিতি তথ্য</div>
-      <div class="info-row"><span>পরিচিতি নম্বর</span><span class="value">DEMO-663</span></div>
-      <div class="info-row"><span>রেফারেন্স নম্বর</span><span class="value">663</span></div>
-      <div class="info-row"><span>অঞ্চল</span><span class="value">ঢাকা</span></div>
+    <div class="section">স্থায়ী ঠিকানা</div>
+    <div class="address" id="permanentAddress">Demo Permanent Address, Bangladesh.</div>
+  </div>
+</main>
 
-      <div class="section-title">ব্যক্তিগত তথ্য</div>
-      <div class="info-row"><span>নাম (বাংলা)</span><span class="value">ডেমো ব্যবহারকারী</span></div>
-      <div class="info-row"><span>নাম (ইংরেজি)</span><span class="value">DEMO USER</span></div>
-      <div class="info-row"><span>জন্ম তারিখ</span><span class="value">2026-10-23</span></div>
-      <div class="info-row"><span>পিতার নাম</span><span class="value">ডেমো পিতা</span></div>
-      <div class="info-row"><span>মাতার নাম</span><span class="value">ডেমো মাতা</span></div>
+<div class="warning">DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY</div>
+<div class="footer">This is a software-generated demonstration report.</div>
 
-      <div class="section-title">অন্যান্য তথ্য</div>
-      <div class="info-row"><span>রক্তের গ্রুপ</span><span class="value">O+</span></div>
-      <div class="info-row"><span>পেশা</span><span class="value">Student</span></div>
-      <div class="info-row"><span>বিবরণ</span><span class="value">Demo information</span></div>
-
-      <div class="section-title">বর্তমান ঠিকানা</div>
-      <div class="address">Demo Present Address, Bangladesh</div>
-
-      <div class="section-title">স্থায়ী ঠিকানা</div>
-      <div class="address">Demo Permanent Address, Bangladesh</div>
-
-      <div class="watermark">
-        DEMO REPORT — FOR DEVELOPMENT PURPOSES ONLY
-        <small>This is a software-generated demonstration report.</small>
-      </div>
-
-    </section>
-  </main>
-
-  <footer class="footer">
-    <button class="back" type="button">Back</button>
-    <button class="download" type="button">Download A4 PDF</button>
-  </footer>
-
+<div class="download-area">
+  <button id="downloadBtn" class="download-btn" type="button" onclick="downloadPDF()">Download A4 PDF</button>
+</div>
 </div>
 
+<script>
+const DEMO_DATA = {
+  personName: "DEMO USER",
+  idNumber: "DEMO-000001",
+  reference: "REF-000001",
+  birthPlace: "Demo District",
+  nameBn: "ডেমো ব্যবহারকারী",
+  nameEn: "DEMO USER",
+  dob: "2000-01-01",
+  father: "Demo Father",
+  mother: "Demo Mother",
+  blood: "O+",
+  spouse: "-",
+  occupation: "Student",
+  other: "Demo Information",
+  presentAddress: "Demo Present Address, Bangladesh.",
+  permanentAddress: "Demo Permanent Address, Bangladesh."
+};
+
+function getFirst(obj, keys, fallback = "") {
+  for (const key of keys) {
+    if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+      return obj[key];
+    }
+  }
+  return fallback;
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el && value !== undefined && value !== null && value !== "") {
+    el.textContent = String(value);
+  }
+}
+
+function renderReport(input) {
+  // Supports either the raw record or {success:true,data:{...}}
+  const record = input && input.data && typeof input.data === "object"
+    ? input.data
+    : input;
+
+  if (!record || typeof record !== "object") return;
+
+  setText("personName", getFirst(record,
+    ["personName", "nameBangla", "name_bn", "name", "full_name"], DEMO_DATA.personName));
+
+  setText("idNumber", getFirst(record,
+    ["idNumber", "id", "reportId", "report_id"], DEMO_DATA.idNumber));
+
+  setText("reference", getFirst(record,
+    ["reference", "referenceNo", "reference_no"], DEMO_DATA.reference));
+
+  setText("birthPlace", getFirst(record,
+    ["birthPlace", "birth_place", "district", "region"], DEMO_DATA.birthPlace));
+
+  setText("nameBn", getFirst(record,
+    ["nameBn", "nameBangla", "name_bn", "banglaName"], DEMO_DATA.nameBn));
+
+  setText("nameEn", getFirst(record,
+    ["nameEn", "nameEnglish", "name_en", "englishName", "full_name", "name"], DEMO_DATA.nameEn));
+
+  setText("dob", getFirst(record,
+    ["dob", "dateOfBirth", "date_of_birth", "birthDate"], DEMO_DATA.dob));
+
+  setText("father", getFirst(record,
+    ["father", "fatherName", "father_name"], DEMO_DATA.father));
+
+  setText("mother", getFirst(record,
+    ["mother", "motherName", "mother_name"], DEMO_DATA.mother));
+
+  setText("blood", getFirst(record,
+    ["blood", "bloodGroup", "blood_group"], DEMO_DATA.blood));
+
+  setText("spouse", getFirst(record,
+    ["spouse", "spouseName", "spouse_name"], DEMO_DATA.spouse));
+
+  setText("occupation", getFirst(record,
+    ["occupation", "profession"], DEMO_DATA.occupation));
+
+  setText("other", getFirst(record,
+    ["other", "description", "remarks"], DEMO_DATA.other));
+
+  setText("presentAddress", getFirst(record,
+    ["presentAddress", "present_address", "currentAddress"], DEMO_DATA.presentAddress));
+
+  setText("permanentAddress", getFirst(record,
+    ["permanentAddress", "permanent_address"], DEMO_DATA.permanentAddress));
+
+  // Optional photo from an API that permits browser access.
+  const photo = getFirst(record, ["photo", "photoUrl", "photo_url", "image"], "");
+  if (typeof photo === "string" && /^https?:\/\//i.test(photo)) {
+    document.getElementById("photo").src = photo;
+  }
+}
+
+function loadSavedData() {
+  try {
+    const saved = sessionStorage.getItem("reportData");
+    if (saved) {
+      renderReport(JSON.parse(saved));
+    } else {
+      renderReport(DEMO_DATA);
+    }
+
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("reference");
+    if (ref) document.getElementById("searchInput").value = ref;
+  } catch (error) {
+    console.error("Could not load saved report data:", error);
+    renderReport(DEMO_DATA);
+  }
+}
+
+loadSavedData();
+
+async function searchData() {
+  const input = document.getElementById("searchInput").value.trim();
+  if (!input) {
+    alert("Please enter a reference number.");
+    return;
+  }
+
+  // Replace with your own API endpoint.
+  const API_URL = "YOUR_API_URL_HERE";
+
+  if (API_URL === "YOUR_API_URL_HERE") {
+    alert("API URL বসানো হয়নি। Search page থেকে পাওয়া data থাকলে সেটি রিপোর্টে দেখা যাবে।");
+    return;
+  }
+
+  try {
+    const url = new URL(API_URL);
+    url.searchParams.set("reference", input);
+
+    const response = await fetch(url.toString());
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const result = await response.json();
+    if (result.success === false) throw new Error("Search failed");
+
+    sessionStorage.setItem("reportData", JSON.stringify(result));
+    renderReport(result);
+
+  } catch (error) {
+    console.error("Search error:", error);
+    alert("API থেকে তথ্য আনা যায়নি। API URL, response format এবং CORS পরীক্ষা করো।");
+  }
+}
+
+async function downloadPDF() {
+  const button = document.getElementById("downloadBtn");
+  const downloadArea = document.querySelector(".download-area");
+  const report = document.getElementById("report");
+
+  if (!window.html2canvas || !window.jspdf) {
+    alert("PDF library লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করো।");
+    return;
+  }
+
+  try {
+    button.disabled = true;
+    button.textContent = "Creating PDF...";
+    downloadArea.style.display = "none";
+
+    await Promise.all([...report.querySelectorAll("img")].map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }));
+
+    const canvas = await html2canvas(report, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      logging: false
+    });
+
+    const image = canvas.toDataURL("image/jpeg", 0.95);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+      compress: true
+    });
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const scale = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+    const width = canvas.width * scale;
+    const height = canvas.height * scale;
+
+    pdf.addImage(
+      image,
+      "JPEG",
+      (pageWidth - width) / 2,
+      (pageHeight - height) / 2,
+      width,
+      height,
+      undefined,
+      "FAST"
+    );
+
+    pdf.save("demo-information-report.pdf");
+
+  } catch (error) {
+    console.error("PDF error:", error);
+    alert("PDF তৈরি করা যায়নি। আবার চেষ্টা করো।");
+  } finally {
+    downloadArea.style.display = "flex";
+    button.disabled = false;
+    button.textContent = "Download A4 PDF";
+  }
+}
+</script>
 </body>
 </html>
