@@ -7,6 +7,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 *{box-sizing:border-box;}
@@ -33,8 +34,10 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .search-area{width:100%;height:38mm;position:relative;background:#fff;text-align:center;padding-top:3mm;}
 .menu-button{position:absolute;right:4mm;top:3mm;background:#147bd3;color:white;border:0;padding:5px 13px;font-size:9px;}
 .search-heading{margin:0 0 1.5mm;color:#9d416e;font-size:14px;font-weight:bold;}
-.search-option{color:#438d7c;font-size:10px;line-height:16px;}
-.search-option input{vertical-align:middle;}
+.search-options{display:table;margin:1mm auto 0;text-align:left;padding:1.5mm 4mm;}
+.search-option{color:#438d7c;font-size:10.5px;font-weight:bold;line-height:16px;text-align:left;padding:1mm 0;}
+.search-option label{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.search-option input{margin:0;}
 .search-form{margin-top:3mm;display:flex;justify-content:center;align-items:center;gap:5px;}
 .search-label{color:#a53c4b;font-size:10px;font-weight:bold;}
 .search-input{width:43mm;height:7mm;border:1px solid #ddd;padding:3px 6px;font-size:10px;outline:none;}
@@ -47,7 +50,8 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .left{text-align:center;padding-top:1mm;}
 .photo{width:35mm;height:43mm;object-fit:cover;border:1px solid #ccc;border-radius:2mm;display:block;margin:auto;}
 .person-name{margin-top:3mm;margin-bottom:7mm;font-size:11px;font-weight:bold;word-break:break-word;}
-.qr{width:31mm;height:31mm;object-fit:contain;display:block;margin:auto;}
+.qr{width:33mm;height:33mm;object-fit:contain;display:block;margin:auto;padding:1.5mm;background:#fff;border:1px solid #ddd;image-rendering:pixelated;}
+.qr-caption{margin-top:1.5mm;font-size:7px;color:#28663b;font-weight:bold;letter-spacing:.3px;}
 
 /* INFORMATION */
 .info{width:100%;}
@@ -114,11 +118,13 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
     <button class="menu-button">Menu</button>
     <h2 class="search-heading">Select Your Search Category</h2>
 
-    <div class="search-option">
-        <label><input type="radio" name="searchType" value="id" checked> Search by ID / Reference No.</label>
-    </div>
-    <div class="search-option">
-        <label><input type="radio" name="searchType" value="form"> Search by Form No.</label>
+    <div class="search-options">
+        <div class="search-option">
+            <label><input type="radio" name="searchType" value="id" checked> Search by ID / Reference No.</label>
+        </div>
+        <div class="search-option">
+            <label><input type="radio" name="searchType" value="form"> Search by Form No.</label>
+        </div>
     </div>
 
     <div class="search-form">
@@ -136,6 +142,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
         <img id="photo" class="photo" alt="Photo">
         <div id="personName" class="person-name">EXAMPLE PERSON</div>
         <img id="qr" class="qr" alt="QR">
+        <div class="qr-caption">SCAN TO VERIFY</div>
     </div>
 
     <!-- INFORMATION -->
@@ -192,7 +199,7 @@ const QR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='
 
 const data = {
     photo: PHOTO,
-    qr: QR,
+    qr: null,   // null = আসল QR নিজে বানাবে
     personName: "EXAMPLE PERSON",
     idNumber: "DEMO-000001",
     reference: "REF-000001",
@@ -237,10 +244,53 @@ function setText(id, value){
     document.getElementById(id).textContent = value || "-";
 }
 
-function loadData(d){
+function makeQR(text){
+    return new Promise(resolve => {
+        try{
+            const box = document.createElement("div");
+            box.style.cssText = "position:absolute;left:-9999px;top:0;";
+            document.body.appendChild(box);
+
+            new QRCode(box, {
+                text: text,
+                width: 512,
+                height: 512,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            setTimeout(() => {
+                const canvas = box.querySelector("canvas");
+                const img = box.querySelector("img");
+                let url = "";
+                try{ url = canvas ? canvas.toDataURL("image/png") : ""; }catch(e){}
+                if(!url && img) url = img.src;
+                box.remove();
+                resolve(url || QR);
+            }, 60);
+        }catch(e){
+            console.error(e);
+            resolve(QR);
+        }
+    });
+}
+
+async function loadData(d){
 
     document.getElementById("photo").src = d.photo || PHOTO;
-    document.getElementById("qr").src = d.qr || QR;
+
+    // API থেকে qr ছবি এলে সেটা, নইলে নিজেই আসল QR বানাবে
+    // QR-এ verify লিংক + তথ্য থাকবে, তাই অনেক ঘরের ঘন QR হবে
+    const base = location.href.split("?")[0].split("#")[0];
+
+    const qrText = d.qrText ||
+        (base + "?reference=" + encodeURIComponent(d.reference || "") +
+         "&id=" + encodeURIComponent(d.idNumber || "") +
+         "&name=" + encodeURIComponent(d.nameEn || "") +
+         "&dob=" + encodeURIComponent(d.dob || ""));
+
+    document.getElementById("qr").src = d.qr || await makeQR(qrText);
 
     setText("personName", d.personName);
     setText("idNumber", d.idNumber);
@@ -273,8 +323,33 @@ async function getRecord(reference, date){
       return await res.json();   // data-এর মতো একই key থাকতে হবে
     */
 
-    // Search পেজ (API বা demo) থেকে সেভ করা তথ্য
-    const saved = sessionStorage.getItem("reportData");
+    // 1) URL-এর ভেতরে আসা তথ্য
+    try{
+        const packed = new URLSearchParams(location.search).get("d");
+        if(packed){
+            const d = JSON.parse(decodeURIComponent(escape(atob(packed))));
+            // বড় ছবি/QR storage-এ থাকলে সেটা বসানো
+            try{
+                const full = JSON.parse(
+                    sessionStorage.getItem("reportData") ||
+                    localStorage.getItem("reportData") || "null"
+                );
+                if(full && (full.reference || "").toUpperCase() === (d.reference || "").toUpperCase()){
+                    d.photo = d.photo || full.photo;
+                    d.qr = d.qr || full.qr;
+                }
+            }catch(e){}
+            return d;
+        }
+    }catch(e){
+        console.error(e);
+    }
+
+    // 2) Search পেজ (API বা demo) থেকে সেভ করা তথ্য
+    let saved = null;
+    try{
+        saved = sessionStorage.getItem("reportData") || localStorage.getItem("reportData");
+    }catch(e){}
 
     if(saved){
         try{
@@ -310,13 +385,15 @@ async function initPage(){
 
     const params = new URLSearchParams(location.search);
 
+    const store = k => { try{ return sessionStorage.getItem(k); }catch(e){ return null; } };
+
     const reference =
         params.get("reference") ||
-        sessionStorage.getItem("reportReference") || "";
+        store("reportReference") || "";
 
     const date =
         params.get("date") ||
-        sessionStorage.getItem("reportDate") || "";
+        store("reportDate") || "";
 
     if(!reference){
         loadData(data);
@@ -326,7 +403,7 @@ async function initPage(){
     document.getElementById("searchInput").value = reference;
 
     try{
-        loadData(await getRecord(reference, date));
+        await loadData(await getRecord(reference, date));
     }catch(e){
         console.error(e);
         alert("তথ্য লোড করতে সমস্যা হয়েছে।");
@@ -350,7 +427,8 @@ function searchData(){
         return;
     }
 
-    const date = sessionStorage.getItem("reportDate") || "";
+    let date = "";
+    try{ date = sessionStorage.getItem("reportDate") || ""; }catch(e){}
 
     location.href =
         "?reference=" + encodeURIComponent(value) +
