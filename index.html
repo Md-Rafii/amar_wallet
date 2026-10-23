@@ -2,711 +2,459 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Information Report</title>
+<title>Information Portal</title>
 
 <style>
 *{
-  box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  background:#eee;
-  font-family:"Noto Sans Bengali",Arial,sans-serif;
-  color:#222;
+    margin:0;
+    padding:30px 0;
+    background:#f3f3f3;
+    font-family:Arial, "Noto Sans Bengali", sans-serif;
 }
 
-.report{
-  width:810px;
-  max-width:96%;
-  margin:30px auto;
-  background:#fff;
-  border:1px solid #bbb;
+/* Main report width */
+.portal{
+    width:1170px;
+    max-width:94%;
+    margin:auto;
+    background:#fff;
+    border:1px solid #ddd;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  height:110px;
-  display:flex;
-  align-items:center;
-  background:linear-gradient(#41684c,#1e3d27);
-  color:white;
+    height:165px;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #aebfaf 0%,
+            #728a76 42%,
+            #1f4229 100%
+        );
 }
 
-.logo{
-  width:115px;
-  height:110px;
-  background:#eee;
-  border-radius:0 60px 60px 0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+/* subtle highlight */
+.header::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    height:100%;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.22),
+            transparent 35%,
+            rgba(0,0,0,.12)
+        );
+    pointer-events:none;
 }
 
-.logo img{
-  width:70px;
+/* Logo area */
+
+.logo-area{
+    position:absolute;
+    left:0;
+    top:0;
+    width:165px;
+    height:165px;
+
+    background:#e9eee9;
+
+    border-radius:0 85px 85px 0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:2;
 }
 
-.header-text{
-  text-align:center;
-  flex:1;
-}
+.logo-placeholder{
+    width:82px;
+    height:82px;
 
-.header-text h1{
-  margin:0;
-  font-size:27px;
-  font-family:Arial;
-}
+    border-radius:50%;
 
-.header-text h2{
-  margin:4px 0 0;
-  color:#f1dc36;
-  font-size:18px;
-}
+    background:#ffffff;
 
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-/* SEARCH */
-
-.search{
-  text-align:center;
-  padding:8px 0 25px;
-}
-
-.search-title{
-  color:#9a3c6b;
-  font-weight:bold;
-  margin-bottom:6px;
-}
-
-.search label{
-  color:#408b7c;
-}
-
-.search-row{
-  margin-top:10px;
-}
-
-.search-row span{
-  color:#b33b4b;
-  font-weight:bold;
-}
-
-.search input{
-  width:145px;
-  padding:7px;
-  border:1px solid #ddd;
-}
-
-.search button{
-  background:#20a548;
-  color:#fff;
-  border:0;
-  padding:8px 15px;
-  margin-left:8px;
-}
-
-
-/* CONTENT */
-
-.content{
-  display:grid;
-  grid-template-columns:210px 1fr;
-  gap:20px;
-  padding:30px 55px;
-}
-
-
-/* LEFT */
-
-.left{
-  text-align:center;
-}
-
-.photo{
-  width:145px;
-  height:175px;
-  object-fit:cover;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
-.person-name{
-  margin:12px 0 30px;
-  font-size:16px;
-  font-weight:bold;
-}
-
-.qr{
-  width:130px;
-  height:130px;
-}
-
-
-/* RIGHT */
-
-.info{
-  width:100%;
-}
-
-.section{
-  background:#b9e2e5;
-  padding:5px 7px;
-  font-size:18px;
-  font-weight:bold;
-  margin-top:8px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:175px 1fr;
-  min-height:32px;
-  border-bottom:1px solid #eee;
-}
-
-.label{
-  padding:5px;
-}
-
-.value{
-  padding:5px;
-}
-
-
-/* ADDRESS */
-
-.address{
-  padding:7px;
-  line-height:1.5;
-  font-size:14px;
-  border-bottom:1px solid #eee;
-}
-
-
-/* FOOTER */
-
-.warning{
-  text-align:center;
-  color:#d33;
-  font-size:12px;
-  margin-top:15px;
-}
-
-.footer{
-  text-align:center;
-  font-family:Georgia,serif;
-  padding:12px;
-  font-size:13px;
-}
-
-
-/* DOWNLOAD */
-
-.download{
-  text-align:center;
-  padding:15px;
-}
-
-.download button{
-  background:#1677d2;
-  color:white;
-  border:0;
-  padding:11px 25px;
-  border-radius:5px;
-  font-size:15px;
-}
-
-
-/* MOBILE */
-
-@media(max-width:650px){
-
-  .report{
-    max-width:100%;
-    margin:0;
-  }
-
-  .header{
-    height:90px;
-  }
-
-  .logo{
-    width:80px;
-    height:90px;
-  }
-
-  .logo img{
-    width:50px;
-  }
-
-  .header-text h1{
-    font-size:17px;
-  }
-
-  .header-text h2{
+    color:#23623a;
     font-size:12px;
-  }
+    font-weight:bold;
+    text-align:center;
 
-  .content{
-    grid-template-columns:1fr;
-    padding:20px;
-  }
+    border:3px solid #2d7045;
+}
 
-  .left{
-    margin-bottom:10px;
-  }
+/* Header text */
 
-  .row{
-    grid-template-columns:42% 58%;
-  }
+.header-content{
+    position:absolute;
+
+    left:165px;
+    right:0;
+    top:0;
+    bottom:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    z-index:2;
+}
+
+.header-title{
+    margin:0;
+
+    color:#fff;
+
+    font-size:36px;
+    font-weight:bold;
+
+    letter-spacing:.2px;
+
+    text-shadow:
+        1px 2px 3px rgba(0,0,0,.35);
+}
+
+.header-subtitle{
+    margin-top:7px;
+
+    color:#f0df35;
+
+    font-size:23px;
+    font-weight:bold;
+
+    text-shadow:
+        1px 2px 2px rgba(0,0,0,.3);
+}
+
+
+/* =========================
+   SEARCH AREA
+========================= */
+
+.search-area{
+    position:relative;
+
+    height:180px;
+
+    background:#fff;
+
+    text-align:center;
+
+    padding-top:8px;
+}
+
+.menu-button{
+    position:absolute;
+
+    right:14px;
+    top:8px;
+
+    background:#1478d4;
+
+    color:#fff;
+
+    border:0;
+
+    padding:9px 18px;
+
+    font-size:13px;
+
+    cursor:pointer;
+}
+
+.search-heading{
+    margin:0 0 7px;
+
+    color:#a1436e;
+
+    font-size:20px;
+
+    font-weight:bold;
+}
+
+.search-option{
+    color:#468f7d;
+
+    font-size:17px;
+
+    line-height:28px;
+}
+
+.search-option input{
+    vertical-align:middle;
+    margin-right:6px;
+}
+
+.search-form{
+    margin-top:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.search-label{
+    color:#a63d4b;
+
+    font-weight:bold;
+
+    font-size:17px;
+}
+
+.search-input{
+    width:220px;
+
+    height:35px;
+
+    border:1px solid #ddd;
+
+    padding:7px 10px;
+
+    font-size:15px;
+
+    outline:none;
+}
+
+.search-input:focus{
+    border-color:#aaa;
+}
+
+.search-button{
+    height:35px;
+
+    padding:0 22px;
+
+    border:0;
+
+    border-radius:2px;
+
+    background:#20a54a;
+
+    color:#fff;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.search-button:hover{
+    background:#168d3c;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    body{
+        padding:10px 0;
+    }
+
+    .portal{
+        max-width:98%;
+    }
+
+    .header{
+        height:115px;
+    }
+
+    .logo-area{
+        width:110px;
+        height:115px;
+        border-radius:0 60px 60px 0;
+    }
+
+    .logo-placeholder{
+        width:60px;
+        height:60px;
+        font-size:9px;
+    }
+
+    .header-content{
+        left:105px;
+    }
+
+    .header-title{
+        font-size:20px;
+        text-align:center;
+    }
+
+    .header-subtitle{
+        font-size:13px;
+        text-align:center;
+    }
+
+    .search-area{
+        height:170px;
+    }
+
+    .search-heading{
+        font-size:16px;
+    }
+
+    .search-option{
+        font-size:14px;
+    }
+
+    .search-form{
+        flex-wrap:wrap;
+        gap:6px;
+    }
+
+    .search-label{
+        font-size:14px;
+    }
+
+    .search-input{
+        width:140px;
+    }
 }
 </style>
 </head>
 
+
 <body>
 
-<div class="report" id="report">
+<div class="portal">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <!-- পরে এখানে নিজের logo বসাবে -->
+        <div class="logo-area">
+
+            <div class="logo-placeholder">
+                YOUR<br>LOGO
+            </div>
+
+        </div>
 
 
-  <!-- HEADER -->
+        <div class="header-content">
 
-  <div class="header">
+            <h1 class="header-title">
+                Bangladesh Information Portal
+            </h1>
 
-    <div class="logo">
-      <img
-        src="https://via.placeholder.com/70"
-        alt="Logo">
-    </div>
+            <div class="header-subtitle">
+                Digital Information Registration System
+            </div>
 
-    <div class="header-text">
-      <h1>Information Report</h1>
-      <h2>National Information System</h2>
-    </div>
-
-  </div>
-
-
-  <!-- SEARCH -->
-
-  <div class="search">
-
-    <div class="search-title">
-      Select Your Search Category
-    </div>
-
-    <label>
-      <input type="radio" checked>
-      Search by ID / Reference No.
-    </label>
-
-    <br>
-
-    <label>
-      <input type="radio">
-      Search by Form No.
-    </label>
-
-    <div class="search-row">
-
-      <span>Reference No.</span>
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Enter">
-
-      <button onclick="loadData()">
-        Search
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- CONTENT -->
-
-  <div class="content">
-
-
-    <!-- LEFT -->
-
-    <div class="left">
-
-      <img
-        id="photo"
-        class="photo"
-        src="https://via.placeholder.com/145x175"
-        alt="Photo">
-
-      <div
-        id="personName"
-        class="person-name">
-        EXAMPLE PERSON
-      </div>
-
-      <img
-        id="qr"
-        class="qr"
-        src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=Example"
-        alt="QR">
+        </div>
 
     </div>
 
 
-    <!-- RIGHT -->
+    <!-- SEARCH -->
 
-    <div class="info">
+    <div class="search-area">
+
+        <button class="menu-button">
+            Menu
+        </button>
 
 
-      <!-- IDENTIFICATION -->
+        <h2 class="search-heading">
+            Select Your Search Category
+        </h2>
 
-      <div class="section">
-        জাতীয় পরিচিতি তথ্য
-      </div>
 
-      <div class="row">
-        <div class="label">
-          পরিচিতি নম্বর
+        <div class="search-option">
+
+            <label>
+                <input
+                    type="radio"
+                    name="searchType"
+                    value="id"
+                    checked
+                >
+
+                Search by ID / Reference No.
+            </label>
+
         </div>
 
-        <div
-          class="value"
-          id="idNumber">
-          XXXXXXXX
-        </div>
-      </div>
 
+        <div class="search-option">
 
-      <div class="row">
-        <div class="label">
-          রেফারেন্স নম্বর
-        </div>
+            <label>
+                <input
+                    type="radio"
+                    name="searchType"
+                    value="form"
+                >
 
-        <div
-          class="value"
-          id="reference">
-          XXXXXXXX
-        </div>
-      </div>
+                Search by Form No.
+            </label>
 
-
-      <div class="row">
-        <div class="label">
-          জন্মস্থান
         </div>
 
-        <div
-          class="value"
-          id="birthPlace">
-          Example
+
+        <div class="search-form">
+
+            <span class="search-label">
+                ID or Reference No*
+            </span>
+
+            <input
+                class="search-input"
+                type="text"
+                placeholder="Enter ID"
+                id="searchInput"
+            >
+
+            <button
+                class="search-button"
+                onclick="searchData()"
+            >
+                Search
+            </button>
+
         </div>
-      </div>
-
-
-      <!-- PERSONAL -->
-
-      <div class="section">
-        ব্যক্তিগত তথ্য
-      </div>
-
-      <div class="row">
-        <div class="label">
-          নাম (বাংলা)
-        </div>
-
-        <div
-          class="value"
-          id="nameBn">
-          উদাহরণ নাম
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          নাম (ইংরেজি)
-        </div>
-
-        <div
-          class="value"
-          id="nameEn">
-          EXAMPLE NAME
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          জন্ম তারিখ
-        </div>
-
-        <div
-          class="value"
-          id="dob">
-          01 Jan 2000
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          পিতার নাম
-        </div>
-
-        <div
-          class="value"
-          id="father">
-          উদাহরণ পিতা
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          মাতার নাম
-        </div>
-
-        <div
-          class="value"
-          id="mother">
-          উদাহরণ মাতা
-        </div>
-      </div>
-
-
-      <!-- OTHER -->
-
-      <div class="section">
-        অন্যান্য তথ্য
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          রক্তের গ্রুপ
-        </div>
-
-        <div
-          class="value"
-          id="blood">
-          O+
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          স্বামী/স্ত্রীর নাম
-        </div>
-
-        <div
-          class="value"
-          id="spouse">
-          -
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          পেশা
-        </div>
-
-        <div
-          class="value"
-          id="occupation">
-          Student
-        </div>
-      </div>
-
-
-      <div class="row">
-        <div class="label">
-          অন্যান্য
-        </div>
-
-        <div
-          class="value"
-          id="other">
-          Example
-        </div>
-      </div>
-
-
-      <!-- PRESENT ADDRESS -->
-
-      <div class="section">
-        বর্তমান ঠিকানা
-      </div>
-
-      <div
-        class="address"
-        id="presentAddress">
-
-        উদাহরণ ঠিকানা, গ্রাম/মহল্লা,
-        ডাকঘর, উপজেলা, জেলা।
-
-      </div>
-
-
-      <!-- PERMANENT ADDRESS -->
-
-      <div class="section">
-        স্থায়ী ঠিকানা
-      </div>
-
-      <div
-        class="address"
-        id="permanentAddress">
-
-        উদাহরণ ঠিকানা, গ্রাম/মহল্লা,
-        ডাকঘর, উপজেলা, জেলা।
-
-      </div>
 
     </div>
-
-  </div>
-
-
-  <div class="warning">
-    এটি একটি demonstration template।
-  </div>
-
-  <div class="footer">
-    This is a Software Generated Report.
-  </div>
-
-
-  <div class="download">
-
-    <button onclick="downloadReport()">
-      Download
-    </button>
-
-  </div>
 
 </div>
 
 
 <script>
 
-/*
-   এখানে API থেকে পাওয়া data বসবে।
-   আপাতত dummy data ব্যবহার করছি।
-*/
+function searchData(){
 
-const data = {
+    const value =
+        document.getElementById("searchInput").value.trim();
 
-  photo: "https://via.placeholder.com/145x175",
+    if(!value){
+        alert("Please enter an ID or reference number.");
+        return;
+    }
 
-  qr: "https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=Example",
-
-  personName: "EXAMPLE PERSON",
-
-  idNumber: "XXXXXXXX",
-
-  reference: "XXXXXXXX",
-
-  birthPlace: "Example",
-
-  nameBn: "উদাহরণ নাম",
-
-  nameEn: "EXAMPLE NAME",
-
-  dob: "01 Jan 2000",
-
-  father: "উদাহরণ পিতা",
-
-  mother: "উদাহরণ মাতা",
-
-  blood: "O+",
-
-  spouse: "-",
-
-  occupation: "Student",
-
-  other: "Example",
-
-  presentAddress:
-    "উদাহরণ বর্তমান ঠিকানা, উপজেলা, জেলা।",
-
-  permanentAddress:
-    "উদাহরণ স্থায়ী ঠিকানা, উপজেলা, জেলা।"
-
-};
-
-
-/* API DATA → DESIGN */
-
-function loadData(){
-
-  document.getElementById("photo").src =
-    data.photo;
-
-  document.getElementById("qr").src =
-    data.qr;
-
-  document.getElementById("personName").textContent =
-    data.personName;
-
-  document.getElementById("idNumber").textContent =
-    data.idNumber;
-
-  document.getElementById("reference").textContent =
-    data.reference;
-
-  document.getElementById("birthPlace").textContent =
-    data.birthPlace;
-
-  document.getElementById("nameBn").textContent =
-    data.nameBn;
-
-  document.getElementById("nameEn").textContent =
-    data.nameEn;
-
-  document.getElementById("dob").textContent =
-    data.dob;
-
-  document.getElementById("father").textContent =
-    data.father;
-
-  document.getElementById("mother").textContent =
-    data.mother;
-
-  document.getElementById("blood").textContent =
-    data.blood;
-
-  document.getElementById("spouse").textContent =
-    data.spouse;
-
-  document.getElementById("occupation").textContent =
-    data.occupation;
-
-  document.getElementById("other").textContent =
-    data.other;
-
-  document.getElementById("presentAddress").textContent =
-    data.presentAddress;
-
-  document.getElementById("permanentAddress").textContent =
-    data.permanentAddress;
-}
-
-
-/* Initial load */
-
-loadData();
-
-
-function downloadReport(){
-
-  alert(
-    "পরের ধাপে এই পুরো report-কে PNG/PDF হিসেবে download করার system যোগ করা যাবে।"
-  );
+    console.log("Search:", value);
 
 }
 
