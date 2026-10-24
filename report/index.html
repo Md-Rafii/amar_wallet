@@ -68,8 +68,9 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .address{width:100%;min-height:16mm;padding:1.8mm;border-bottom:1px solid #eee;font-size:11px;line-height:1.45;}
 
 /* FOOTER */
-.warning{text-align:center;color:#d33;font-size:8.5px;margin:2mm 8mm 1mm;}
-.footer{text-align:center;font-family:Georgia,serif;font-size:9.5px;padding-bottom:2mm;}
+.sheet-footer{position:absolute;left:0;right:0;bottom:5px;}
+.warning{text-align:center;color:#d33;font-size:8.5px;margin:0 8mm 1mm;}
+.footer{text-align:center;font-family:Georgia,serif;font-size:9.5px;padding-bottom:0;}
 
 /* DOWNLOAD */
 .download-area{width:210mm;max-width:100%;margin:0 auto;padding:6px 0 28px;display:flex;justify-content:center;align-items:center;}
@@ -90,6 +91,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
   body{background:#ddd;padding:0;}
   .a4-page{width:100%;height:auto;min-height:297mm;margin:0;border:0;box-shadow:none;padding:10px;}
   .sheet{height:auto;min-height:calc(297mm - 20px);}
+  .sheet-footer{position:static;padding:8px 0 5px;}
   .header{height:96px;}
   .logo-area{width:96px;height:96px;border-radius:0 19px 19px 0 / 0 50% 50% 0;}
   .logo-placeholder{width:52px;height:52px;font-size:8px;}
@@ -193,8 +195,10 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 </main>
 
 <!-- FOOTER -->
+<div class="sheet-footer">
 <div class="warning">DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY</div>
 <div class="footer">This is a software generated demonstration report.</div>
+</div>
 
 </div><!-- /sheet -->
 
