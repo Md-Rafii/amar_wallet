@@ -15,16 +15,17 @@ html,body{margin:0;padding:0;}
 body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#222;}
 
 /* A4 PAGE */
-.a4-page{width:210mm;height:297mm;margin:20px auto;background:#fff;position:relative;overflow:hidden;border:1px solid #bbb;box-shadow:0 0 12px rgba(0,0,0,.18);}
+.a4-page{width:210mm;height:297mm;margin:20px auto;background:#fff;position:relative;overflow:hidden;border:1px solid #bbb;box-shadow:0 0 12px rgba(0,0,0,.18);padding:0.3in 0.6in 0.8in 0.6in;}
+.sheet{position:relative;width:100%;height:100%;overflow:hidden;background:#fff;border:1px solid #8fa090;box-shadow:0 0 4px rgba(0,0,0,.22);}
 
 /* HEADER */
-.header{width:100%;height:40mm;position:relative;overflow:hidden;background:linear-gradient(to bottom,#b5c2b6 0%,#788f7b 42%,#24462d 100%);}
+.header{width:100%;height:1in;position:relative;overflow:hidden;background:linear-gradient(to bottom,#b5c2b6 0%,#788f7b 42%,#24462d 100%);}
 .header::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 38%,rgba(0,0,0,.12));pointer-events:none;}
 
 /* LOGO */
-.logo-area{position:absolute;left:0;top:0;width:42mm;height:40mm;background:linear-gradient(to right,rgba(0,0,0,0) 30%,rgba(0,0,0,.14) 60%,rgba(0,0,0,.34) 85%,rgba(0,0,0,.5) 100%),linear-gradient(135deg,#d9ddd9 0%,#b3b9b3 55%,#98a098 100%);border-radius:0 21mm 21mm 0;display:flex;justify-content:center;align-items:center;z-index:2;}
-.site-logo{width:26mm;height:26mm;object-fit:contain;display:block;margin-right:2mm;}
-.logo-placeholder{margin-right:2mm;width:23mm;height:23mm;border-radius:50%;background:#fff;border:2px solid #28663b;display:flex;justify-content:center;align-items:center;text-align:center;color:#28663b;font-size:9px;font-weight:bold;}
+.logo-area{position:absolute;left:0;top:0;width:30mm;height:1in;background:linear-gradient(to right,rgba(0,0,0,0) 30%,rgba(0,0,0,.14) 60%,rgba(0,0,0,.34) 85%,rgba(0,0,0,.5) 100%),linear-gradient(135deg,#d9ddd9 0%,#b3b9b3 55%,#98a098 100%);border-radius:0 12.7mm 12.7mm 0;display:flex;justify-content:center;align-items:center;z-index:2;}
+.site-logo{width:18mm;height:18mm;object-fit:contain;display:block;margin-right:2mm;}
+.logo-placeholder{margin-right:1.5mm;width:16mm;height:16mm;border-radius:50%;background:#fff;border:2px solid #28663b;display:flex;justify-content:center;align-items:center;text-align:center;color:#28663b;font-size:7px;font-weight:bold;}
 
 /* HEADER TEXT */
 .header-content{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;justify-content:center;align-items:center;z-index:2;}
@@ -51,9 +52,9 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 
 /* LEFT */
 .left{text-align:center;padding-top:1mm;}
-.photo{width:35mm;height:43mm;object-fit:cover;border:1px solid #ccc;border-radius:2mm;display:block;margin:auto;}
+.photo{width:1.3in;height:1.5in;object-fit:cover;border:1px solid #ccc;border-radius:2mm;display:block;margin:auto;}
 .person-name{margin-top:3mm;margin-bottom:7mm;font-size:13px;font-weight:bold;word-break:break-word;}
-.qr{width:33mm;height:33mm;object-fit:contain;display:block;margin:auto;padding:1.5mm;background:#fff;border:1px solid #ddd;image-rendering:pixelated;}
+.qr{width:1in;height:1.1in;object-fit:contain;display:block;margin:auto;padding:1.5mm;background:#fff;border:1px solid #ddd;image-rendering:pixelated;}
 .qr-caption{margin-top:1.5mm;font-size:7px;color:#28663b;font-weight:bold;letter-spacing:.3px;}
 
 /* INFORMATION */
@@ -85,12 +86,13 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 /* MOBILE */
 @media(max-width:700px){
   body{background:#ddd;padding:0;}
-  .a4-page{width:100%;height:auto;min-height:297mm;margin:0;border:0;box-shadow:none;}
-  .header{height:110px;}
-  .logo-area{width:105px;height:110px;border-radius:0 55px 55px 0;}
-  .logo-placeholder{width:58px;height:58px;font-size:8px;}
-  .site-logo{width:62px;height:62px;margin-right:6px;}
-  .header-content{left:100px;}
+  .a4-page{width:100%;height:auto;min-height:297mm;margin:0;border:0;box-shadow:none;padding:10px;}
+  .sheet{height:auto;min-height:calc(297mm - 20px);}
+  .header{height:96px;}
+  .logo-area{width:96px;height:96px;border-radius:0 48px 48px 0;}
+  .logo-placeholder{width:52px;height:52px;font-size:8px;}
+  .site-logo{width:54px;height:54px;margin-right:6px;}
+  .header-content{left:96px;}
   .header-title{font-size:21px;padding:0;}
   .header-subtitle{font-size:12px;padding:0;}
   .search-area{height:135px;}
@@ -105,6 +107,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 <body>
 
 <div class="a4-page" id="report">
+<div class="sheet">
 
 <!-- HEADER -->
 <header class="header">
@@ -192,6 +195,8 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 <div class="download-area">
     <button id="downloadBtn" class="download-btn" onclick="downloadPDF()">Download A4 PDF</button>
 </div>
+
+</div><!-- /sheet -->
 
 </div>
 
@@ -527,23 +532,8 @@ async function downloadPDF(){
             compress: true
         });
 
-        const pageWidth = 210;
-        const pageHeight = 297;
-
-        const ratio = canvas.width / canvas.height;
-
-        let width = pageWidth;
-        let height = width / ratio;
-
-        if(height > pageHeight){
-            height = pageHeight;
-            width = height * ratio;
-        }
-
-        const x = (pageWidth - width) / 2;
-        const y = (pageHeight - height) / 2;
-
-        pdf.addImage(image, "JPEG", x, y, width, height, undefined, "FAST");
+        // পুরো A4 পেজ (চার পাশের ফাঁকা মার্জিনসহ) হুবহু বসানো
+        pdf.addImage(image, "JPEG", 0, 0, 210, 297, undefined, "FAST");
 
         const ref = document.getElementById("reference").textContent.trim() || "report";
 
