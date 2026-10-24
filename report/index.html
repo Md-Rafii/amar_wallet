@@ -23,9 +23,9 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .header::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 38%,rgba(0,0,0,.12));pointer-events:none;}
 
 /* LOGO */
-.logo-area{position:absolute;left:0;top:0;width:30mm;height:1in;background:linear-gradient(to right,rgba(0,0,0,0) 30%,rgba(0,0,0,.14) 60%,rgba(0,0,0,.34) 85%,rgba(0,0,0,.5) 100%),linear-gradient(135deg,#d9ddd9 0%,#b3b9b3 55%,#98a098 100%);border-radius:0 12.7mm 12.7mm 0;display:flex;justify-content:center;align-items:center;z-index:2;}
-.site-logo{width:18mm;height:18mm;object-fit:contain;display:block;margin-right:2mm;}
-.logo-placeholder{margin-right:1.5mm;width:16mm;height:16mm;border-radius:50%;background:#fff;border:2px solid #28663b;display:flex;justify-content:center;align-items:center;text-align:center;color:#28663b;font-size:7px;font-weight:bold;}
+.logo-area{position:absolute;left:0;top:0;width:1in;height:1in;background:linear-gradient(to right,rgba(0,0,0,0) 35%,rgba(0,0,0,.16) 65%,rgba(0,0,0,.36) 88%,rgba(0,0,0,.55) 100%),linear-gradient(135deg,#d9ddd9 0%,#b3b9b3 55%,#98a098 100%);border-radius:0 5mm 5mm 0 / 0 50% 50% 0;display:flex;justify-content:center;align-items:center;z-index:2;}
+.site-logo{width:17mm;height:17mm;object-fit:contain;display:block;margin-right:0;}
+.logo-placeholder{margin-right:0;width:16mm;height:16mm;border-radius:50%;background:#fff;border:2px solid #28663b;display:flex;justify-content:center;align-items:center;text-align:center;color:#28663b;font-size:7px;font-weight:bold;}
 
 /* HEADER TEXT */
 .header-content{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;justify-content:center;align-items:center;z-index:2;}
@@ -63,6 +63,8 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .row{width:100%;min-height:6.7mm;display:grid;grid-template-columns:44mm 1fr;border-bottom:1px solid #ededed;font-size:11.5px;}
 .label{padding:1.3mm 1mm;word-break:break-word;}
 .value{padding:1.3mm 1mm;word-break:break-word;}
+#blood{color:#d32222;}
+#nameBn{font-weight:bold;}
 .address{width:100%;min-height:16mm;padding:1.8mm;border-bottom:1px solid #eee;font-size:11px;line-height:1.45;}
 
 /* FOOTER */
@@ -70,7 +72,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 .footer{text-align:center;font-family:Georgia,serif;font-size:9.5px;padding-bottom:2mm;}
 
 /* DOWNLOAD */
-.download-area{position:absolute;bottom:0;left:0;right:0;height:14mm;background:#f4f4f4;border-top:1px solid #ddd;display:flex;justify-content:center;align-items:center;}
+.download-area{width:210mm;max-width:100%;margin:0 auto;padding:6px 0 28px;display:flex;justify-content:center;align-items:center;}
 .download-btn{background:#147bd3;color:white;border:0;padding:7px 20px;border-radius:4px;font-size:12px;cursor:pointer;}
 .download-btn:disabled{opacity:.6;cursor:wait;}
 
@@ -89,7 +91,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
   .a4-page{width:100%;height:auto;min-height:297mm;margin:0;border:0;box-shadow:none;padding:10px;}
   .sheet{height:auto;min-height:calc(297mm - 20px);}
   .header{height:96px;}
-  .logo-area{width:96px;height:96px;border-radius:0 48px 48px 0;}
+  .logo-area{width:96px;height:96px;border-radius:0 19px 19px 0 / 0 50% 50% 0;}
   .logo-placeholder{width:52px;height:52px;font-size:8px;}
   .site-logo{width:54px;height:54px;margin-right:6px;}
   .header-content{left:96px;}
@@ -99,7 +101,7 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
   .content{grid-template-columns:1fr;padding:32px 20px 20px;}
   .left{margin-bottom:15px;}
   .row{grid-template-columns:42% 58%;}
-  .download-area{position:relative;height:auto;padding:12px;}
+  .download-area{width:100%;padding:12px 0 24px;}
 }
 </style>
 </head>
@@ -163,7 +165,9 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
         <div class="section">পরিচিতি তথ্য</div>
         <div class="row"><div class="label">পরিচিতি নম্বর</div><div class="value" id="idNumber">DEMO-000001</div></div>
         <div class="row"><div class="label">রেফারেন্স নম্বর</div><div class="value" id="reference">REF-000001</div></div>
-        <div class="row"><div class="label">জন্মস্থান</div><div class="value" id="birthPlace">Example District</div></div>
+        <div class="row"><div class="label">ব্যক্তিগত নম্বর</div><div class="value" id="personalNumber">PN-000001</div></div>
+        <div class="row"><div class="label">পেশা</div><div class="value" id="occupation">Student</div></div>
+        <div class="row"><div class="label">এলাকা</div><div class="value" id="area">Example Area</div></div>
 
         <div class="section">ব্যক্তিগত তথ্য</div>
         <div class="row"><div class="label">নাম (বাংলা)</div><div class="value" id="nameBn">উদাহরণ নাম</div></div>
@@ -171,12 +175,13 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
         <div class="row"><div class="label">জন্ম তারিখ</div><div class="value" id="dob">01 Jan 2000</div></div>
         <div class="row"><div class="label">পিতার নাম</div><div class="value" id="father">Example Father</div></div>
         <div class="row"><div class="label">মাতার নাম</div><div class="value" id="mother">Example Mother</div></div>
+        <div class="row"><div class="label">স্বামী/স্ত্রীর নাম</div><div class="value" id="spouse">-</div></div>
 
         <div class="section">অন্যান্য তথ্য</div>
+        <div class="row"><div class="label">লিঙ্গ</div><div class="value" id="gender">Male</div></div>
+        <div class="row"><div class="label">ধর্ম</div><div class="value" id="religion">Islam</div></div>
         <div class="row"><div class="label">রক্তের গ্রুপ</div><div class="value" id="blood">O+</div></div>
-        <div class="row"><div class="label">স্বামী/স্ত্রীর নাম</div><div class="value" id="spouse">-</div></div>
-        <div class="row"><div class="label">পেশা</div><div class="value" id="occupation">Student</div></div>
-        <div class="row"><div class="label">অন্যান্য</div><div class="value" id="other">Demo Information</div></div>
+        <div class="row"><div class="label">জন্মস্থান</div><div class="value" id="birthPlace">Example District</div></div>
 
         <div class="section">বর্তমান ঠিকানা</div>
         <div class="address" id="presentAddress">Example Village, Example Post Office, Example Upazila, Example District.</div>
@@ -191,13 +196,13 @@ body{background:#e5e5e5;font-family:Arial,"Noto Sans Bengali",sans-serif;color:#
 <div class="warning">DEMO REPORT — FOR DESIGN AND DEVELOPMENT PURPOSES ONLY</div>
 <div class="footer">This is a software generated demonstration report.</div>
 
+</div><!-- /sheet -->
+
+</div>
+
 <!-- DOWNLOAD -->
 <div class="download-area">
     <button id="downloadBtn" class="download-btn" onclick="downloadPDF()">Download A4 PDF</button>
-</div>
-
-</div><!-- /sheet -->
-
 </div>
 
 
@@ -218,15 +223,18 @@ const data = {
     idNumber: "DEMO-000001",
     reference: "REF-000001",
     birthPlace: "Example District",
+    personalNumber: "PN-000001",
+    area: "Example Area",
     nameBn: "উদাহরণ নাম",
     nameEn: "EXAMPLE NAME",
     dob: "01 Jan 2000",
     father: "Example Father",
     mother: "Example Mother",
+    gender: "Male",
+    religion: "Islam",
     blood: "O+",
     spouse: "-",
     occupation: "Student",
-    other: "Demo Information",
     presentAddress: "Example Village, Example Post Office, Example Upazila, Example District.",
     permanentAddress: "Example Village, Example Post Office, Example Upazila, Example District."
 };
@@ -315,10 +323,13 @@ async function loadData(d){
     setText("dob", d.dob);
     setText("father", d.father);
     setText("mother", d.mother);
+    setText("gender", d.gender);
+    setText("religion", d.religion);
     setText("blood", d.blood);
     setText("spouse", d.spouse);
     setText("occupation", d.occupation);
-    setText("other", d.other);
+    setText("personalNumber", d.personalNumber);
+    setText("area", d.area);
     setText("presentAddress", d.presentAddress);
     setText("permanentAddress", d.permanentAddress);
 }
@@ -379,14 +390,13 @@ async function getRecord(reference, date){
     const found = records[reference.toUpperCase()];
 
     if(found){
-        return { ...found, other: "Search Date: " + date };
+        return { ...found };
     }
 
     // রেকর্ড না থাকলে demo data, কিন্তু সার্চ করা reference দেখাবে
     return {
         ...data,
         reference: reference,
-        other: "Search Date: " + date
     };
 }
 
@@ -535,9 +545,16 @@ async function downloadPDF(){
         // পুরো A4 পেজ (চার পাশের ফাঁকা মার্জিনসহ) হুবহু বসানো
         pdf.addImage(image, "JPEG", 0, 0, 210, 297, undefined, "FAST");
 
-        const ref = document.getElementById("reference").textContent.trim() || "report";
+        // ফাইলের নাম: ব্যক্তির নাম.pdf
+        let fileName =
+            document.getElementById("nameEn").textContent.trim() ||
+            document.getElementById("nameBn").textContent.trim() ||
+            document.getElementById("reference").textContent.trim() ||
+            "report";
 
-        pdf.save("information-report-" + ref + ".pdf");
+        fileName = fileName.replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "_");
+
+        pdf.save(fileName + ".pdf");
 
     }catch(error){
 
